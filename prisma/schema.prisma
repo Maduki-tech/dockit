@@ -12,15 +12,17 @@ datasource db {
 }
 
 model Family {
-    id   Int    @id @default(autoincrement())
-    name String
+    id         Int    @id @default(autoincrement())
+    name       String
+    inviteCode String @unique
 
     member User[]
 }
 
 model User {
-    id   Int    @id @default(autoincrement())
-    name String
+    id      Int    @id @default(autoincrement())
+    name    String
+    clerkId String @unique
 
     tasks    Task[]
     family   Family? @relation(fields: [familyId], references: [id])

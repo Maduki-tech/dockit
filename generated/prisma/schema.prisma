@@ -11,11 +11,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Family {
+  id         Int    @id @default(autoincrement())
+  name       String
+  inviteCode String @unique
 
-  @@index([name])
+  member User[]
+}
+
+model User {
+  id      Int    @id @default(autoincrement())
+  name    String
+  clerkId String @unique
+
+  tasks    Task[]
+  family   Family? @relation(fields: [familyId], references: [id])
+  familyId Int?
+}
+
+model Task {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  status TaskStatus @default(TODO)
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?
+
+  @@index([userId, status])
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
 }
