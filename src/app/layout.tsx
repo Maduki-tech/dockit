@@ -1,32 +1,34 @@
-import "~/styles/globals.css";
+import '~/styles/globals.css';
 
-import { type Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
-import { Inter } from "next/font/google";
+import { type Metadata } from 'next';
+import { ClerkProvider } from '@clerk/nextjs';
+import { Inter } from 'next/font/google';
 
-import { TRPCReactProvider } from "~/trpc/react";
+import { TRPCReactProvider } from '~/trpc/react';
+import { Toaster } from '~/components/ui/sonner';
 
 export const metadata: Metadata = {
-  title: "Dockit",
-  description: "Shared task list for families and couples",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+    title: 'Dockit',
+    description: 'Shared task list for families and couples',
+    icons: [{ rel: 'icon', url: '/favicon.ico' }],
 };
 
 const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
+    subsets: ['latin'],
+    variable: '--font-inter',
 });
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{ children: React.ReactNode }>) {
-  return (
-    <ClerkProvider>
-      <html lang="en" className={`${inter.variable}`}>
-        <body>
-          <TRPCReactProvider>{children}</TRPCReactProvider>
-        </body>
-      </html>
-    </ClerkProvider>
-  );
+    return (
+        <ClerkProvider>
+            <html lang="en" className={`${inter.variable}`}>
+                <body>
+                    <TRPCReactProvider>{children}</TRPCReactProvider>
+                    <Toaster richColors />
+                </body>
+            </html>
+        </ClerkProvider>
+    );
 }

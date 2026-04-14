@@ -2,7 +2,8 @@ import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import { api, HydrateClient } from '~/trpc/server';
 import { AppNavbar } from '~/components/app-navbar';
-import { Button } from '~/components/ui/button';
+import { CreateTaskDialog } from '~/components/create-task-dialog';
+import { TaskList } from '~/components/task-list';
 
 export default async function TasksPage() {
     const { userId } = await auth();
@@ -12,6 +13,8 @@ export default async function TasksPage() {
 
     if (!user?.familyId) redirect('/onboarding');
 
+    void api.task.list.prefetch();
+
     return (
         <HydrateClient>
             <div className="bg-background text-foreground min-h-screen">
@@ -19,43 +22,16 @@ export default async function TasksPage() {
                 <main className="mx-auto max-w-5xl px-4 py-8">
                     <div className="flex items-center justify-between">
                         <h1 className="mb-1 text-2xl font-semibold">Tasks</h1>
-                        <Button variant="outline" size="sm" className="mb-4">
-                            + Create Task
-                        </Button>
+                        <CreateTaskDialog />
                     </div>
                     <p className="text-muted-foreground text-sm">
                         Manage your family&apos;s tasks here.
                     </p>
-                    <div className="mt-6 space-y-4">
-                        {new Array(5).fill(0).map((_, i) => (
-                            <TaskItem
-                                key={i}
-                                title={`Task ${i + 1}`}
-                                assignedTo={`Assigned to User ${i + 1}`}
-                            />
-                        ))}
+                    <div className="mt-6">
+                        <TaskList />
                     </div>
                 </main>
             </div>
         </HydrateClient>
-    );
-}
-
-type TaskItemProps = {
-    title: string;
-    assignedTo: string;
-};
-
-function TaskItem({ title, assignedTo }: TaskItemProps) {
-    return (
-        <div className="flex items-center justify-between rounded-md border p-4">
-            <div>
-                <h3 className="text-lg font-medium">{title}</h3>
-                <p className="text-muted-foreground text-sm">{assignedTo}</p>
-            </div>
-            <Button variant="outline" size="sm">
-                Mark as Done
-            </Button>
-        </div>
     );
 }
