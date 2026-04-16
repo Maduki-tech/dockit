@@ -28,7 +28,7 @@ export default async function TasksPage() {
                         Manage your family&apos;s tasks here.
                     </p>
                     <div className="mt-6">
-                        <TaskList />
+                        <TaskList familyId={user.familyId} />
                     </div>
                 </main>
             </div>

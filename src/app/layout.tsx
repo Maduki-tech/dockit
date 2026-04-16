@@ -3,6 +3,7 @@ import '~/styles/globals.css';
 import { type Metadata } from 'next';
 import { ClerkProvider } from '@clerk/nextjs';
 import { Inter } from 'next/font/google';
+import { ThemeProvider } from 'next-themes';
 
 import { TRPCReactProvider } from '~/trpc/react';
 import { Toaster } from '~/components/ui/sonner';
@@ -23,10 +24,12 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
     return (
         <ClerkProvider>
-            <html lang="en" className={`${inter.variable}`}>
+            <html lang="en" className={`${inter.variable}`} suppressHydrationWarning>
                 <body>
-                    <TRPCReactProvider>{children}</TRPCReactProvider>
-                    <Toaster richColors />
+                    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+                        <TRPCReactProvider>{children}</TRPCReactProvider>
+                        <Toaster richColors />
+                    </ThemeProvider>
                 </body>
             </html>
         </ClerkProvider>

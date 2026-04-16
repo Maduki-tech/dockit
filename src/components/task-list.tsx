@@ -4,9 +4,23 @@ import { api } from '~/trpc/react';
 import { Button } from '~/components/ui/button';
 import { toast } from 'sonner';
 import { TaskStatus } from '../../generated/prisma';
+import {
+    ContextMenuTrigger,
+    ContextMenu,
+    ContextMenuContent,
+    ContextMenuGroup,
+    ContextMenuItem,
+    ContextMenuSub,
+    ContextMenuSubTrigger,
+    ContextMenuSubContent,
+} from './ui/context-menu';
 
-export function TaskList() {
+export function TaskList({ familyId }: { familyId: number }) {
     const { data: tasks = [], isLoading } = api.task.list.useQuery();
+    const { data: membersOfFamily } = api.family.getMembersOfFamily.useQuery({
+        familyId,
+    });
+
     const utils = api.useUtils();
 
     const updateTask = api.task.update.useMutation({
@@ -30,37 +44,75 @@ export function TaskList() {
         );
     }
 
+    function assignUser(taskId: string) {}
+
     return (
         <div className="space-y-4">
             {tasks.map((task) => (
-                <div
-                    key={task.id}
-                    className="flex items-center justify-between rounded-md border p-4"
-                >
-                    <div>
-                        <h3
-                            className={`text-lg font-medium ${task.status === TaskStatus.DONE ? 'text-muted-foreground line-through' : ''}`}
-                        >
-                            {task.name}
-                        </h3>
-                        <p className="text-muted-foreground text-sm">
-                            {task.user ? (task.user.name ?? 'Unknown') : 'Unassigned'}
-                        </p>
-                    </div>
-                    <Button
-                        variant={task.status === TaskStatus.DONE ? 'secondary' : 'outline'}
-                        size="sm"
-                        disabled={task.status === TaskStatus.DONE || updateTask.isPending}
-                        onClick={() =>
-                            updateTask.mutate({
-                                id: task.id,
-                                status: TaskStatus.DONE,
-                            })
-                        }
-                    >
-                        {task.status === TaskStatus.DONE ? 'Done' : 'Mark as Done'}
-                    </Button>
-                </div>
+                <ContextMenu key={task.id}>
+                    <ContextMenuTrigger>
+                        <div className="flex items-center justify-between rounded-md border p-4">
+                            <div>
+                                <h3
+                                    className={`text-lg font-medium ${task.status === TaskStatus.DONE ? 'text-muted-foreground line-through' : ''}`}
+                                >
+                                    {task.name}
+                                </h3>
+                                <p className="text-muted-foreground text-sm">
+                                    {task.user
+                                        ? (task.user.name ?? 'Unknown')
+                                        : 'Unassigned'}
+                                </p>
+                            </div>
+                            <Button
+                                variant={
+                                    task.status === TaskStatus.DONE
+                                        ? 'secondary'
+                                        : 'outline'
+                                }
+                                size="sm"
+                                disabled={
+                                    task.status === TaskStatus.DONE ||
+                                    updateTask.isPending
+                                }
+                                onClick={() =>
+                                    updateTask.mutate({
+                                        id: task.id,
+                                        status: TaskStatus.DONE,
+                                    })
+                                }
+                            >
+                                {task.status === TaskStatus.DONE
+                                    ? 'Done'
+                                    : 'Mark as Done'}
+                            </Button>
+                        </div>
+                    </ContextMenuTrigger>
+                    <ContextMenuContent>
+                        <ContextMenuGroup>
+                            <ContextMenuSub>
+                                <ContextMenuSubTrigger>
+                                    Assign to...
+                                </ContextMenuSubTrigger>
+                                <ContextMenuSubContent>
+                                    {membersOfFamily?.map((member) => (
+                                        <ContextMenuItem
+                                            key={member.id}
+                                            onSelect={() =>
+                                                updateTask.mutate({
+                                                    id: task.id,
+                                                    userId: member.id,
+                                                })
+                                            }
+                                        >
+                                            {member.name ?? 'Unknown'}
+                                        </ContextMenuItem>
+                                    ))}
+                                </ContextMenuSubContent>
+                            </ContextMenuSub>
+                        </ContextMenuGroup>
+                    </ContextMenuContent>
+                </ContextMenu>
             ))}
         </div>
     );
