@@ -1062,10 +1062,12 @@ export namespace Prisma {
 
   export type FamilyCountOutputType = {
     member: number
+    tasks: number
   }
 
   export type FamilyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | FamilyCountOutputTypeCountMemberArgs
+    tasks?: boolean | FamilyCountOutputTypeCountTasksArgs
   }
 
   // Custom InputTypes
@@ -1084,6 +1086,13 @@ export namespace Prisma {
    */
   export type FamilyCountOutputTypeCountMemberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserWhereInput
+  }
+
+  /**
+   * FamilyCountOutputType without action
+   */
+  export type FamilyCountOutputTypeCountTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TaskWhereInput
   }
 
 
@@ -1305,6 +1314,7 @@ export namespace Prisma {
     name?: boolean
     inviteCode?: boolean
     member?: boolean | Family$memberArgs<ExtArgs>
+    tasks?: boolean | Family$tasksArgs<ExtArgs>
     _count?: boolean | FamilyCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["family"]>
 
@@ -1329,6 +1339,7 @@ export namespace Prisma {
   export type FamilyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "inviteCode", ExtArgs["result"]["family"]>
   export type FamilyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | Family$memberArgs<ExtArgs>
+    tasks?: boolean | Family$tasksArgs<ExtArgs>
     _count?: boolean | FamilyCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FamilyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1338,6 +1349,7 @@ export namespace Prisma {
     name: "Family"
     objects: {
       member: Prisma.$UserPayload<ExtArgs>[]
+      tasks: Prisma.$TaskPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -1738,6 +1750,7 @@ export namespace Prisma {
   export interface Prisma__FamilyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     member<T extends Family$memberArgs<ExtArgs> = {}>(args?: Subset<T, Family$memberArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tasks<T extends Family$tasksArgs<ExtArgs> = {}>(args?: Subset<T, Family$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2179,6 +2192,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+  }
+
+  /**
+   * Family.tasks
+   */
+  export type Family$tasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    where?: TaskWhereInput
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    cursor?: TaskWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
   }
 
   /**
@@ -3347,11 +3384,13 @@ export namespace Prisma {
   export type TaskAvgAggregateOutputType = {
     id: number | null
     userId: number | null
+    familyId: number | null
   }
 
   export type TaskSumAggregateOutputType = {
     id: number | null
     userId: number | null
+    familyId: number | null
   }
 
   export type TaskMinAggregateOutputType = {
@@ -3359,6 +3398,7 @@ export namespace Prisma {
     name: string | null
     status: $Enums.TaskStatus | null
     userId: number | null
+    familyId: number | null
   }
 
   export type TaskMaxAggregateOutputType = {
@@ -3366,6 +3406,7 @@ export namespace Prisma {
     name: string | null
     status: $Enums.TaskStatus | null
     userId: number | null
+    familyId: number | null
   }
 
   export type TaskCountAggregateOutputType = {
@@ -3373,6 +3414,7 @@ export namespace Prisma {
     name: number
     status: number
     userId: number
+    familyId: number
     _all: number
   }
 
@@ -3380,11 +3422,13 @@ export namespace Prisma {
   export type TaskAvgAggregateInputType = {
     id?: true
     userId?: true
+    familyId?: true
   }
 
   export type TaskSumAggregateInputType = {
     id?: true
     userId?: true
+    familyId?: true
   }
 
   export type TaskMinAggregateInputType = {
@@ -3392,6 +3436,7 @@ export namespace Prisma {
     name?: true
     status?: true
     userId?: true
+    familyId?: true
   }
 
   export type TaskMaxAggregateInputType = {
@@ -3399,6 +3444,7 @@ export namespace Prisma {
     name?: true
     status?: true
     userId?: true
+    familyId?: true
   }
 
   export type TaskCountAggregateInputType = {
@@ -3406,6 +3452,7 @@ export namespace Prisma {
     name?: true
     status?: true
     userId?: true
+    familyId?: true
     _all?: true
   }
 
@@ -3500,6 +3547,7 @@ export namespace Prisma {
     name: string
     status: $Enums.TaskStatus
     userId: number | null
+    familyId: number
     _count: TaskCountAggregateOutputType | null
     _avg: TaskAvgAggregateOutputType | null
     _sum: TaskSumAggregateOutputType | null
@@ -3526,7 +3574,9 @@ export namespace Prisma {
     name?: boolean
     status?: boolean
     userId?: boolean
+    familyId?: boolean
     user?: boolean | Task$userArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["task"]>
 
   export type TaskSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3534,7 +3584,9 @@ export namespace Prisma {
     name?: boolean
     status?: boolean
     userId?: boolean
+    familyId?: boolean
     user?: boolean | Task$userArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["task"]>
 
   export type TaskSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3542,7 +3594,9 @@ export namespace Prisma {
     name?: boolean
     status?: boolean
     userId?: boolean
+    familyId?: boolean
     user?: boolean | Task$userArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["task"]>
 
   export type TaskSelectScalar = {
@@ -3550,29 +3604,35 @@ export namespace Prisma {
     name?: boolean
     status?: boolean
     userId?: boolean
+    familyId?: boolean
   }
 
-  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "status" | "userId", ExtArgs["result"]["task"]>
+  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "status" | "userId" | "familyId", ExtArgs["result"]["task"]>
   export type TaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Task$userArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
   }
   export type TaskIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Task$userArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
   }
   export type TaskIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Task$userArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
   }
 
   export type $TaskPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Task"
     objects: {
       user: Prisma.$UserPayload<ExtArgs> | null
+      family: Prisma.$FamilyPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       name: string
       status: $Enums.TaskStatus
       userId: number | null
+      familyId: number
     }, ExtArgs["result"]["task"]>
     composites: {}
   }
@@ -3968,6 +4028,7 @@ export namespace Prisma {
   export interface Prisma__TaskClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends Task$userArgs<ExtArgs> = {}>(args?: Subset<T, Task$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    family<T extends FamilyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FamilyDefaultArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4001,6 +4062,7 @@ export namespace Prisma {
     readonly name: FieldRef<"Task", 'String'>
     readonly status: FieldRef<"Task", 'TaskStatus'>
     readonly userId: FieldRef<"Task", 'Int'>
+    readonly familyId: FieldRef<"Task", 'Int'>
   }
     
 
@@ -4471,7 +4533,8 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     status: 'status',
-    userId: 'userId'
+    userId: 'userId',
+    familyId: 'familyId'
   };
 
   export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
@@ -4573,6 +4636,7 @@ export namespace Prisma {
     name?: StringFilter<"Family"> | string
     inviteCode?: StringFilter<"Family"> | string
     member?: UserListRelationFilter
+    tasks?: TaskListRelationFilter
   }
 
   export type FamilyOrderByWithRelationInput = {
@@ -4580,6 +4644,7 @@ export namespace Prisma {
     name?: SortOrder
     inviteCode?: SortOrder
     member?: UserOrderByRelationAggregateInput
+    tasks?: TaskOrderByRelationAggregateInput
   }
 
   export type FamilyWhereUniqueInput = Prisma.AtLeast<{
@@ -4590,6 +4655,7 @@ export namespace Prisma {
     NOT?: FamilyWhereInput | FamilyWhereInput[]
     name?: StringFilter<"Family"> | string
     member?: UserListRelationFilter
+    tasks?: TaskListRelationFilter
   }, "id" | "inviteCode">
 
   export type FamilyOrderByWithAggregationInput = {
@@ -4675,7 +4741,9 @@ export namespace Prisma {
     name?: StringFilter<"Task"> | string
     status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
     userId?: IntNullableFilter<"Task"> | number | null
+    familyId?: IntFilter<"Task"> | number
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    family?: XOR<FamilyScalarRelationFilter, FamilyWhereInput>
   }
 
   export type TaskOrderByWithRelationInput = {
@@ -4683,7 +4751,9 @@ export namespace Prisma {
     name?: SortOrder
     status?: SortOrder
     userId?: SortOrderInput | SortOrder
+    familyId?: SortOrder
     user?: UserOrderByWithRelationInput
+    family?: FamilyOrderByWithRelationInput
   }
 
   export type TaskWhereUniqueInput = Prisma.AtLeast<{
@@ -4694,7 +4764,9 @@ export namespace Prisma {
     name?: StringFilter<"Task"> | string
     status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
     userId?: IntNullableFilter<"Task"> | number | null
+    familyId?: IntFilter<"Task"> | number
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    family?: XOR<FamilyScalarRelationFilter, FamilyWhereInput>
   }, "id">
 
   export type TaskOrderByWithAggregationInput = {
@@ -4702,6 +4774,7 @@ export namespace Prisma {
     name?: SortOrder
     status?: SortOrder
     userId?: SortOrderInput | SortOrder
+    familyId?: SortOrder
     _count?: TaskCountOrderByAggregateInput
     _avg?: TaskAvgOrderByAggregateInput
     _max?: TaskMaxOrderByAggregateInput
@@ -4717,12 +4790,14 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Task"> | string
     status?: EnumTaskStatusWithAggregatesFilter<"Task"> | $Enums.TaskStatus
     userId?: IntNullableWithAggregatesFilter<"Task"> | number | null
+    familyId?: IntWithAggregatesFilter<"Task"> | number
   }
 
   export type FamilyCreateInput = {
     name: string
     inviteCode: string
     member?: UserCreateNestedManyWithoutFamilyInput
+    tasks?: TaskCreateNestedManyWithoutFamilyInput
   }
 
   export type FamilyUncheckedCreateInput = {
@@ -4730,12 +4805,14 @@ export namespace Prisma {
     name: string
     inviteCode: string
     member?: UserUncheckedCreateNestedManyWithoutFamilyInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutFamilyInput
   }
 
   export type FamilyUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     inviteCode?: StringFieldUpdateOperationsInput | string
     member?: UserUpdateManyWithoutFamilyNestedInput
+    tasks?: TaskUpdateManyWithoutFamilyNestedInput
   }
 
   export type FamilyUncheckedUpdateInput = {
@@ -4743,6 +4820,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     inviteCode?: StringFieldUpdateOperationsInput | string
     member?: UserUncheckedUpdateManyWithoutFamilyNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutFamilyNestedInput
   }
 
   export type FamilyCreateManyInput = {
@@ -4815,6 +4893,7 @@ export namespace Prisma {
     name: string
     status?: $Enums.TaskStatus
     user?: UserCreateNestedOneWithoutTasksInput
+    family: FamilyCreateNestedOneWithoutTasksInput
   }
 
   export type TaskUncheckedCreateInput = {
@@ -4822,12 +4901,14 @@ export namespace Prisma {
     name: string
     status?: $Enums.TaskStatus
     userId?: number | null
+    familyId: number
   }
 
   export type TaskUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     user?: UserUpdateOneWithoutTasksNestedInput
+    family?: FamilyUpdateOneRequiredWithoutTasksNestedInput
   }
 
   export type TaskUncheckedUpdateInput = {
@@ -4835,6 +4916,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     userId?: NullableIntFieldUpdateOperationsInput | number | null
+    familyId?: IntFieldUpdateOperationsInput | number
   }
 
   export type TaskCreateManyInput = {
@@ -4842,6 +4924,7 @@ export namespace Prisma {
     name: string
     status?: $Enums.TaskStatus
     userId?: number | null
+    familyId: number
   }
 
   export type TaskUpdateManyMutationInput = {
@@ -4854,6 +4937,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     userId?: NullableIntFieldUpdateOperationsInput | number | null
+    familyId?: IntFieldUpdateOperationsInput | number
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -4888,7 +4972,17 @@ export namespace Prisma {
     none?: UserWhereInput
   }
 
+  export type TaskListRelationFilter = {
+    every?: TaskWhereInput
+    some?: TaskWhereInput
+    none?: TaskWhereInput
+  }
+
   export type UserOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TaskOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -4963,12 +5057,6 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type TaskListRelationFilter = {
-    every?: TaskWhereInput
-    some?: TaskWhereInput
-    none?: TaskWhereInput
-  }
-
   export type FamilyNullableScalarRelationFilter = {
     is?: FamilyWhereInput | null
     isNot?: FamilyWhereInput | null
@@ -4977,10 +5065,6 @@ export namespace Prisma {
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
-  }
-
-  export type TaskOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type UserCountOrderByAggregateInput = {
@@ -5042,16 +5126,23 @@ export namespace Prisma {
     isNot?: UserWhereInput | null
   }
 
+  export type FamilyScalarRelationFilter = {
+    is?: FamilyWhereInput
+    isNot?: FamilyWhereInput
+  }
+
   export type TaskCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     status?: SortOrder
     userId?: SortOrder
+    familyId?: SortOrder
   }
 
   export type TaskAvgOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    familyId?: SortOrder
   }
 
   export type TaskMaxOrderByAggregateInput = {
@@ -5059,6 +5150,7 @@ export namespace Prisma {
     name?: SortOrder
     status?: SortOrder
     userId?: SortOrder
+    familyId?: SortOrder
   }
 
   export type TaskMinOrderByAggregateInput = {
@@ -5066,11 +5158,13 @@ export namespace Prisma {
     name?: SortOrder
     status?: SortOrder
     userId?: SortOrder
+    familyId?: SortOrder
   }
 
   export type TaskSumOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    familyId?: SortOrder
   }
 
   export type EnumTaskStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -5090,11 +5184,25 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
+  export type TaskCreateNestedManyWithoutFamilyInput = {
+    create?: XOR<TaskCreateWithoutFamilyInput, TaskUncheckedCreateWithoutFamilyInput> | TaskCreateWithoutFamilyInput[] | TaskUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutFamilyInput | TaskCreateOrConnectWithoutFamilyInput[]
+    createMany?: TaskCreateManyFamilyInputEnvelope
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutFamilyInput = {
     create?: XOR<UserCreateWithoutFamilyInput, UserUncheckedCreateWithoutFamilyInput> | UserCreateWithoutFamilyInput[] | UserUncheckedCreateWithoutFamilyInput[]
     connectOrCreate?: UserCreateOrConnectWithoutFamilyInput | UserCreateOrConnectWithoutFamilyInput[]
     createMany?: UserCreateManyFamilyInputEnvelope
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type TaskUncheckedCreateNestedManyWithoutFamilyInput = {
+    create?: XOR<TaskCreateWithoutFamilyInput, TaskUncheckedCreateWithoutFamilyInput> | TaskCreateWithoutFamilyInput[] | TaskUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutFamilyInput | TaskCreateOrConnectWithoutFamilyInput[]
+    createMany?: TaskCreateManyFamilyInputEnvelope
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -5113,6 +5221,20 @@ export namespace Prisma {
     update?: UserUpdateWithWhereUniqueWithoutFamilyInput | UserUpdateWithWhereUniqueWithoutFamilyInput[]
     updateMany?: UserUpdateManyWithWhereWithoutFamilyInput | UserUpdateManyWithWhereWithoutFamilyInput[]
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type TaskUpdateManyWithoutFamilyNestedInput = {
+    create?: XOR<TaskCreateWithoutFamilyInput, TaskUncheckedCreateWithoutFamilyInput> | TaskCreateWithoutFamilyInput[] | TaskUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutFamilyInput | TaskCreateOrConnectWithoutFamilyInput[]
+    upsert?: TaskUpsertWithWhereUniqueWithoutFamilyInput | TaskUpsertWithWhereUniqueWithoutFamilyInput[]
+    createMany?: TaskCreateManyFamilyInputEnvelope
+    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    update?: TaskUpdateWithWhereUniqueWithoutFamilyInput | TaskUpdateWithWhereUniqueWithoutFamilyInput[]
+    updateMany?: TaskUpdateManyWithWhereWithoutFamilyInput | TaskUpdateManyWithWhereWithoutFamilyInput[]
+    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -5135,6 +5257,20 @@ export namespace Prisma {
     update?: UserUpdateWithWhereUniqueWithoutFamilyInput | UserUpdateWithWhereUniqueWithoutFamilyInput[]
     updateMany?: UserUpdateManyWithWhereWithoutFamilyInput | UserUpdateManyWithWhereWithoutFamilyInput[]
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type TaskUncheckedUpdateManyWithoutFamilyNestedInput = {
+    create?: XOR<TaskCreateWithoutFamilyInput, TaskUncheckedCreateWithoutFamilyInput> | TaskCreateWithoutFamilyInput[] | TaskUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutFamilyInput | TaskCreateOrConnectWithoutFamilyInput[]
+    upsert?: TaskUpsertWithWhereUniqueWithoutFamilyInput | TaskUpsertWithWhereUniqueWithoutFamilyInput[]
+    createMany?: TaskCreateManyFamilyInputEnvelope
+    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    update?: TaskUpdateWithWhereUniqueWithoutFamilyInput | TaskUpdateWithWhereUniqueWithoutFamilyInput[]
+    updateMany?: TaskUpdateManyWithWhereWithoutFamilyInput | TaskUpdateManyWithWhereWithoutFamilyInput[]
+    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
   }
 
   export type TaskCreateNestedManyWithoutUserInput = {
@@ -5209,6 +5345,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type FamilyCreateNestedOneWithoutTasksInput = {
+    create?: XOR<FamilyCreateWithoutTasksInput, FamilyUncheckedCreateWithoutTasksInput>
+    connectOrCreate?: FamilyCreateOrConnectWithoutTasksInput
+    connect?: FamilyWhereUniqueInput
+  }
+
   export type EnumTaskStatusFieldUpdateOperationsInput = {
     set?: $Enums.TaskStatus
   }
@@ -5221,6 +5363,14 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTasksInput, UserUpdateWithoutTasksInput>, UserUncheckedUpdateWithoutTasksInput>
+  }
+
+  export type FamilyUpdateOneRequiredWithoutTasksNestedInput = {
+    create?: XOR<FamilyCreateWithoutTasksInput, FamilyUncheckedCreateWithoutTasksInput>
+    connectOrCreate?: FamilyCreateOrConnectWithoutTasksInput
+    upsert?: FamilyUpsertWithoutTasksInput
+    connect?: FamilyWhereUniqueInput
+    update?: XOR<XOR<FamilyUpdateToOneWithWhereWithoutTasksInput, FamilyUpdateWithoutTasksInput>, FamilyUncheckedUpdateWithoutTasksInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -5370,6 +5520,29 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TaskCreateWithoutFamilyInput = {
+    name: string
+    status?: $Enums.TaskStatus
+    user?: UserCreateNestedOneWithoutTasksInput
+  }
+
+  export type TaskUncheckedCreateWithoutFamilyInput = {
+    id?: number
+    name: string
+    status?: $Enums.TaskStatus
+    userId?: number | null
+  }
+
+  export type TaskCreateOrConnectWithoutFamilyInput = {
+    where: TaskWhereUniqueInput
+    create: XOR<TaskCreateWithoutFamilyInput, TaskUncheckedCreateWithoutFamilyInput>
+  }
+
+  export type TaskCreateManyFamilyInputEnvelope = {
+    data: TaskCreateManyFamilyInput | TaskCreateManyFamilyInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithWhereUniqueWithoutFamilyInput = {
     where: UserWhereUniqueInput
     update: XOR<UserUpdateWithoutFamilyInput, UserUncheckedUpdateWithoutFamilyInput>
@@ -5396,15 +5569,44 @@ export namespace Prisma {
     familyId?: IntNullableFilter<"User"> | number | null
   }
 
+  export type TaskUpsertWithWhereUniqueWithoutFamilyInput = {
+    where: TaskWhereUniqueInput
+    update: XOR<TaskUpdateWithoutFamilyInput, TaskUncheckedUpdateWithoutFamilyInput>
+    create: XOR<TaskCreateWithoutFamilyInput, TaskUncheckedCreateWithoutFamilyInput>
+  }
+
+  export type TaskUpdateWithWhereUniqueWithoutFamilyInput = {
+    where: TaskWhereUniqueInput
+    data: XOR<TaskUpdateWithoutFamilyInput, TaskUncheckedUpdateWithoutFamilyInput>
+  }
+
+  export type TaskUpdateManyWithWhereWithoutFamilyInput = {
+    where: TaskScalarWhereInput
+    data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyWithoutFamilyInput>
+  }
+
+  export type TaskScalarWhereInput = {
+    AND?: TaskScalarWhereInput | TaskScalarWhereInput[]
+    OR?: TaskScalarWhereInput[]
+    NOT?: TaskScalarWhereInput | TaskScalarWhereInput[]
+    id?: IntFilter<"Task"> | number
+    name?: StringFilter<"Task"> | string
+    status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
+    userId?: IntNullableFilter<"Task"> | number | null
+    familyId?: IntFilter<"Task"> | number
+  }
+
   export type TaskCreateWithoutUserInput = {
     name: string
     status?: $Enums.TaskStatus
+    family: FamilyCreateNestedOneWithoutTasksInput
   }
 
   export type TaskUncheckedCreateWithoutUserInput = {
     id?: number
     name: string
     status?: $Enums.TaskStatus
+    familyId: number
   }
 
   export type TaskCreateOrConnectWithoutUserInput = {
@@ -5420,12 +5622,14 @@ export namespace Prisma {
   export type FamilyCreateWithoutMemberInput = {
     name: string
     inviteCode: string
+    tasks?: TaskCreateNestedManyWithoutFamilyInput
   }
 
   export type FamilyUncheckedCreateWithoutMemberInput = {
     id?: number
     name: string
     inviteCode: string
+    tasks?: TaskUncheckedCreateNestedManyWithoutFamilyInput
   }
 
   export type FamilyCreateOrConnectWithoutMemberInput = {
@@ -5449,16 +5653,6 @@ export namespace Prisma {
     data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type TaskScalarWhereInput = {
-    AND?: TaskScalarWhereInput | TaskScalarWhereInput[]
-    OR?: TaskScalarWhereInput[]
-    NOT?: TaskScalarWhereInput | TaskScalarWhereInput[]
-    id?: IntFilter<"Task"> | number
-    name?: StringFilter<"Task"> | string
-    status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
-    userId?: IntNullableFilter<"Task"> | number | null
-  }
-
   export type FamilyUpsertWithoutMemberInput = {
     update: XOR<FamilyUpdateWithoutMemberInput, FamilyUncheckedUpdateWithoutMemberInput>
     create: XOR<FamilyCreateWithoutMemberInput, FamilyUncheckedCreateWithoutMemberInput>
@@ -5473,12 +5667,14 @@ export namespace Prisma {
   export type FamilyUpdateWithoutMemberInput = {
     name?: StringFieldUpdateOperationsInput | string
     inviteCode?: StringFieldUpdateOperationsInput | string
+    tasks?: TaskUpdateManyWithoutFamilyNestedInput
   }
 
   export type FamilyUncheckedUpdateWithoutMemberInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     inviteCode?: StringFieldUpdateOperationsInput | string
+    tasks?: TaskUncheckedUpdateManyWithoutFamilyNestedInput
   }
 
   export type UserCreateWithoutTasksInput = {
@@ -5497,6 +5693,24 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutTasksInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutTasksInput, UserUncheckedCreateWithoutTasksInput>
+  }
+
+  export type FamilyCreateWithoutTasksInput = {
+    name: string
+    inviteCode: string
+    member?: UserCreateNestedManyWithoutFamilyInput
+  }
+
+  export type FamilyUncheckedCreateWithoutTasksInput = {
+    id?: number
+    name: string
+    inviteCode: string
+    member?: UserUncheckedCreateNestedManyWithoutFamilyInput
+  }
+
+  export type FamilyCreateOrConnectWithoutTasksInput = {
+    where: FamilyWhereUniqueInput
+    create: XOR<FamilyCreateWithoutTasksInput, FamilyUncheckedCreateWithoutTasksInput>
   }
 
   export type UserUpsertWithoutTasksInput = {
@@ -5523,10 +5737,41 @@ export namespace Prisma {
     familyId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
+  export type FamilyUpsertWithoutTasksInput = {
+    update: XOR<FamilyUpdateWithoutTasksInput, FamilyUncheckedUpdateWithoutTasksInput>
+    create: XOR<FamilyCreateWithoutTasksInput, FamilyUncheckedCreateWithoutTasksInput>
+    where?: FamilyWhereInput
+  }
+
+  export type FamilyUpdateToOneWithWhereWithoutTasksInput = {
+    where?: FamilyWhereInput
+    data: XOR<FamilyUpdateWithoutTasksInput, FamilyUncheckedUpdateWithoutTasksInput>
+  }
+
+  export type FamilyUpdateWithoutTasksInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    inviteCode?: StringFieldUpdateOperationsInput | string
+    member?: UserUpdateManyWithoutFamilyNestedInput
+  }
+
+  export type FamilyUncheckedUpdateWithoutTasksInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    inviteCode?: StringFieldUpdateOperationsInput | string
+    member?: UserUncheckedUpdateManyWithoutFamilyNestedInput
+  }
+
   export type UserCreateManyFamilyInput = {
     id?: number
     name: string
     clerkId: string
+  }
+
+  export type TaskCreateManyFamilyInput = {
+    id?: number
+    name: string
+    status?: $Enums.TaskStatus
+    userId?: number | null
   }
 
   export type UserUpdateWithoutFamilyInput = {
@@ -5548,27 +5793,51 @@ export namespace Prisma {
     clerkId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type TaskUpdateWithoutFamilyInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    user?: UserUpdateOneWithoutTasksNestedInput
+  }
+
+  export type TaskUncheckedUpdateWithoutFamilyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    userId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type TaskUncheckedUpdateManyWithoutFamilyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    userId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
   export type TaskCreateManyUserInput = {
     id?: number
     name: string
     status?: $Enums.TaskStatus
+    familyId: number
   }
 
   export type TaskUpdateWithoutUserInput = {
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    family?: FamilyUpdateOneRequiredWithoutTasksNestedInput
   }
 
   export type TaskUncheckedUpdateWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    familyId?: IntFieldUpdateOperationsInput | number
   }
 
   export type TaskUncheckedUpdateManyWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    familyId?: IntFieldUpdateOperationsInput | number
   }
 
 

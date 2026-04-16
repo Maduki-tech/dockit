@@ -17,6 +17,7 @@ model Family {
     inviteCode String @unique
 
     member User[]
+    tasks  Task[]
 }
 
 model User {
@@ -38,6 +39,10 @@ model Task {
     user   User? @relation(fields: [userId], references: [id])
     userId Int?
 
+    family   Family @relation(fields: [familyId], references: [id])
+    familyId Int
+
+    @@index([familyId, status])
     @@index([userId, status])
 }
 

@@ -15,11 +15,13 @@ import {
     ContextMenuSubContent,
 } from './ui/context-menu';
 
-export function TaskList({ familyId }: { familyId: number }) {
+export function TaskList() {
     const { data: tasks = [], isLoading } = api.task.list.useQuery();
-    const { data: membersOfFamily } = api.family.getMembersOfFamily.useQuery({
-        familyId,
-    });
+    const { data: me } = api.user.me.useQuery();
+    const { data: membersOfFamily } = api.family.getMembersOfFamily.useQuery(
+        { familyId: me?.familyId ?? 0 },
+        { enabled: !!me?.familyId },
+    );
 
     const utils = api.useUtils();
 

@@ -138,7 +138,8 @@ exports.Prisma.TaskScalarFieldEnum = {
   id: 'id',
   name: 'name',
   status: 'status',
-  userId: 'userId'
+  userId: 'userId',
+  familyId: 'familyId'
 };
 
 exports.Prisma.SortOrder = {
