@@ -20,16 +20,13 @@ export default async function TasksPage() {
             <div className="bg-background text-foreground min-h-screen">
                 <AppNavbar />
                 <main className="mx-auto max-w-5xl px-4 py-8">
-                    <div className="flex items-center justify-between">
-                        <h1 className="mb-1 text-2xl font-semibold">Tasks</h1>
+                    <div className="mb-8 flex items-center justify-between">
+                        <h1 className="text-xl font-semibold tracking-tight">
+                            Tasks
+                        </h1>
                         <CreateTaskDialog />
                     </div>
-                    <p className="text-muted-foreground text-sm">
-                        Manage your family&apos;s tasks here.
-                    </p>
-                    <div className="mt-6">
-                        <TaskList />
-                    </div>
+                    <TaskList />
                 </main>
             </div>
         </HydrateClient>

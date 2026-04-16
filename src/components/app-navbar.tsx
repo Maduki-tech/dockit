@@ -28,16 +28,16 @@ export function AppNavbar() {
           )}
         </Link>
 
-        <nav className="flex items-center gap-1">
+        <nav className="flex items-center gap-0.5">
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
               className={cn(
-                "rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                "rounded-md px-3 py-1.5 text-sm transition-colors",
                 pathname === href
-                  ? "bg-accent text-accent-foreground"
-                  : "text-muted-foreground",
+                  ? "font-medium text-foreground"
+                  : "font-normal text-muted-foreground hover:text-foreground",
               )}
             >
               {label}
