@@ -39,7 +39,7 @@ function UserAvatar({ name, id }: { name: string | null; id: number }) {
         <div
             className={cn(
                 'flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full text-xs font-semibold',
-                colorClass,
+                colorClass
             )}
         >
             {initials}
@@ -52,7 +52,7 @@ export function TaskList() {
     const { data: me } = api.user.me.useQuery();
     const { data: membersOfFamily } = api.family.getMembersOfFamily.useQuery(
         { familyId: me?.familyId ?? 0 },
-        { enabled: !!me?.familyId },
+        { enabled: !!me?.familyId }
     );
 
     const utils = api.useUtils();
@@ -71,8 +71,8 @@ export function TaskList() {
             <div className="space-y-1">
                 {Array.from({ length: 3 }).map((_, i) => (
                     <div key={i} className="flex items-center gap-4 py-3">
-                        <div className="h-5 w-5 animate-pulse rounded-full bg-muted" />
-                        <div className="h-4 w-48 animate-pulse rounded bg-muted" />
+                        <div className="bg-muted h-5 w-5 animate-pulse rounded-full" />
+                        <div className="bg-muted h-4 w-48 animate-pulse rounded" />
                     </div>
                 ))}
             </div>
@@ -106,7 +106,7 @@ export function TaskList() {
                     <div
                         className={cn(
                             'group flex cursor-default items-center gap-4 px-1 py-3',
-                            !isLast && 'border-b border-border/50',
+                            !isLast && 'border-border/50 border-b'
                         )}
                     >
                         <button
@@ -114,7 +114,7 @@ export function TaskList() {
                                 'flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border-2 transition-all duration-150',
                                 task.status === TaskStatus.DONE
                                     ? 'border-foreground bg-foreground'
-                                    : 'border-muted-foreground/30 hover:border-foreground group-hover:border-muted-foreground/60',
+                                    : 'border-muted-foreground/30 hover:border-foreground group-hover:border-muted-foreground/60'
                             )}
                             disabled={
                                 task.status === TaskStatus.DONE ||
@@ -129,7 +129,7 @@ export function TaskList() {
                         >
                             {task.status === TaskStatus.DONE && (
                                 <Check
-                                    className="h-3 w-3 text-background"
+                                    className="text-background h-3 w-3"
                                     strokeWidth={2.5}
                                 />
                             )}
@@ -137,18 +137,21 @@ export function TaskList() {
 
                         <span
                             className={cn(
-                                'flex-1 text-sm font-medium leading-snug',
+                                'flex-1 text-sm leading-snug font-medium',
                                 task.status === TaskStatus.DONE &&
-                                    'text-muted-foreground line-through',
+                                    'text-muted-foreground line-through'
                             )}
                         >
                             {task.name}
                         </span>
 
                         {task.user ? (
-                            <UserAvatar name={task.user.name} id={task.user.id} />
+                            <UserAvatar
+                                name={task.user.name}
+                                id={task.user.id}
+                            />
                         ) : (
-                            <div className="h-7 w-7 flex-shrink-0 rounded-full border-2 border-dashed border-muted-foreground/20" />
+                            <div className="border-muted-foreground/20 h-7 w-7 flex-shrink-0 rounded-full border-2 border-dashed" />
                         )}
                     </div>
                 </ContextMenuTrigger>
@@ -183,7 +186,7 @@ export function TaskList() {
     return (
         <div>
             {pending.length === 0 ? (
-                <p className="px-1 py-3 text-sm text-muted-foreground">
+                <p className="text-muted-foreground px-1 py-3 text-sm">
                     All tasks are done!
                 </p>
             ) : (
@@ -198,7 +201,7 @@ export function TaskList() {
 
             {done.length > 0 && (
                 <div className="mt-8">
-                    <p className="mb-2 px-1 text-xs font-medium uppercase tracking-wide text-muted-foreground/50">
+                    <p className="text-muted-foreground/50 mb-2 px-1 text-xs font-medium tracking-wide uppercase">
                         Completed · {done.length}
                     </p>
                     <div className="opacity-50">

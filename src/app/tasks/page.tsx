@@ -17,7 +17,7 @@ export default async function TasksPage() {
 
     return (
         <HydrateClient>
-            <div className="bg-background text-foreground min-h-screen">
+            <div className="bg-background text-foreground min-h-screen text-2xl">
                 <AppNavbar />
                 <main className="mx-auto max-w-5xl px-4 py-8">
                     <div className="mb-8 flex items-center justify-between">
