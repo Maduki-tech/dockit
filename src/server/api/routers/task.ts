@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { TRPCError } from '@trpc/server';
-import { TaskStatus } from '../../../../generated/prisma';
+import { TaskStatus, TaskPriority } from '../../../../generated/prisma';
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc';
 
 async function getCallerFamilyId(
@@ -63,11 +63,20 @@ export const taskRouter = createTRPCRouter({
                 name: z.string().min(1),
                 userId: z.number().optional(),
                 status: z.nativeEnum(TaskStatus).optional(),
+                priority: z.nativeEnum(TaskPriority).optional(),
+                dueDate: z.string().datetime().optional(),
             })
         )
         .mutation(async ({ ctx, input }) => {
             const familyId = await getCallerFamilyId(ctx.db, ctx.userId);
-            return ctx.db.task.create({ data: { ...input, familyId } });
+            const { dueDate, ...rest } = input;
+            return ctx.db.task.create({
+                data: {
+                    ...rest,
+                    familyId,
+                    ...(dueDate && { dueDate: new Date(dueDate) }),
+                },
+            });
         }),
 
     update: protectedProcedure
@@ -76,12 +85,22 @@ export const taskRouter = createTRPCRouter({
                 id: z.number(),
                 name: z.string().min(1).optional(),
                 status: z.nativeEnum(TaskStatus).optional(),
+                priority: z.nativeEnum(TaskPriority).optional(),
+                dueDate: z.string().datetime().nullable().optional(),
                 userId: z.number().nullable().optional(),
             })
         )
         .mutation(({ ctx, input }) => {
-            const { id, ...data } = input;
-            return ctx.db.task.update({ where: { id }, data });
+            const { id, dueDate, ...rest } = input;
+            return ctx.db.task.update({
+                where: { id },
+                data: {
+                    ...rest,
+                    ...(dueDate !== undefined && {
+                        dueDate: dueDate ? new Date(dueDate) : null,
+                    }),
+                },
+            });
         }),
 
     delete: protectedProcedure

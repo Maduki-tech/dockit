@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { api, HydrateClient } from '~/trpc/server';
 import { AppNavbar } from '~/components/app-navbar';
 import { CreateTaskDialog } from '~/components/create-task-dialog';
-import { TaskList } from '~/components/task-list';
+import { TasksView } from '~/components/tasks-view';
 
 export default async function TasksPage() {
     const { userId } = await auth();
@@ -17,16 +17,21 @@ export default async function TasksPage() {
 
     return (
         <HydrateClient>
-            <div className="bg-background text-foreground min-h-screen text-2xl">
+            <div className="bg-background text-foreground min-h-screen">
                 <AppNavbar />
                 <main className="mx-auto max-w-5xl px-4 py-8">
-                    <div className="mb-8 flex items-center justify-between">
-                        <h1 className="text-xl font-semibold tracking-tight">
-                            Tasks
-                        </h1>
+                    <div className="mb-6 flex items-center justify-between">
+                        <div>
+                            <h1 className="text-xl font-semibold tracking-tight">
+                                Tasks
+                            </h1>
+                            <p className="text-muted-foreground mt-0.5 text-sm">
+                                Right-click any task for more options.
+                            </p>
+                        </div>
                         <CreateTaskDialog />
                     </div>
-                    <TaskList />
+                    <TasksView />
                 </main>
             </div>
         </HydrateClient>

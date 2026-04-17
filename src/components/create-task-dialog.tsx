@@ -22,11 +22,14 @@ import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
 import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
+import { TaskPriority } from '../../generated/prisma';
 
 export function CreateTaskDialog() {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState('');
     const [assigneeId, setAssigneeId] = useState<string>('');
+    const [priority, setPriority] = useState<TaskPriority>(TaskPriority.MEDIUM);
+    const [dueDate, setDueDate] = useState<string>('');
 
     const { data: me } = api.user.me.useQuery();
     const { data: members = [] } = api.family.getMembersOfFamily.useQuery(
@@ -46,12 +49,14 @@ export function CreateTaskDialog() {
         },
     });
 
-    function handleSubmit(e: React.SubmitEvent) {
+    function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         if (!name.trim()) return;
         createTask.mutate({
             name: name.trim(),
             userId: assigneeId ? Number(assigneeId) : undefined,
+            priority,
+            dueDate: dueDate ? new Date(dueDate).toISOString() : undefined,
         });
     }
 
@@ -59,6 +64,8 @@ export function CreateTaskDialog() {
         if (!next) {
             setName('');
             setAssigneeId('');
+            setPriority(TaskPriority.MEDIUM);
+            setDueDate('');
         }
         setOpen(next);
     }
@@ -86,6 +93,44 @@ export function CreateTaskDialog() {
                             autoFocus
                         />
                     </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-2">
+                            <Label>Priority</Label>
+                            <Select
+                                value={priority}
+                                onValueChange={(v) =>
+                                    setPriority(v as TaskPriority)
+                                }
+                            >
+                                <SelectTrigger>
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value={TaskPriority.LOW}>
+                                        Low
+                                    </SelectItem>
+                                    <SelectItem value={TaskPriority.MEDIUM}>
+                                        Medium
+                                    </SelectItem>
+                                    <SelectItem value={TaskPriority.HIGH}>
+                                        High
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="due-date">Due date</Label>
+                            <Input
+                                id="due-date"
+                                type="date"
+                                value={dueDate}
+                                onChange={(e) => setDueDate(e.target.value)}
+                            />
+                        </div>
+                    </div>
+
                     <div className="space-y-2">
                         <Label>Assign to</Label>
                         <Select
@@ -107,6 +152,7 @@ export function CreateTaskDialog() {
                             </SelectContent>
                         </Select>
                     </div>
+
                     {createTask.error && (
                         <p className="text-destructive text-sm">
                             {createTask.error.message}

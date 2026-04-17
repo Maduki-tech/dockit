@@ -138,6 +138,8 @@ exports.Prisma.TaskScalarFieldEnum = {
   id: 'id',
   name: 'name',
   status: 'status',
+  priority: 'priority',
+  dueDate: 'dueDate',
   userId: 'userId',
   familyId: 'familyId'
 };
@@ -160,6 +162,12 @@ exports.TaskStatus = exports.$Enums.TaskStatus = {
   TODO: 'TODO',
   IN_PROGRESS: 'IN_PROGRESS',
   DONE: 'DONE'
+};
+
+exports.TaskPriority = exports.$Enums.TaskPriority = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH'
 };
 
 exports.Prisma.ModelName = {
