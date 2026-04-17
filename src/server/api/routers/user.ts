@@ -59,4 +59,20 @@ export const userRouter = createTRPCRouter({
         .mutation(({ ctx, input }) => {
             return ctx.db.user.delete({ where: { id: input.id } });
         }),
+
+    updateMe: protectedProcedure
+        .input(z.object({ name: z.string().min(1).max(50) }))
+        .mutation(({ ctx, input }) => {
+            return ctx.db.user.update({
+                where: { clerkId: ctx.userId },
+                data: { name: input.name },
+            });
+        }),
+
+    leaveFamily: protectedProcedure.mutation(({ ctx }) => {
+        return ctx.db.user.update({
+            where: { clerkId: ctx.userId },
+            data: { familyId: null, role: 'MEMBER' },
+        });
+    }),
 });

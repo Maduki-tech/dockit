@@ -103,6 +103,7 @@ exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
   clerkId: 'clerkId',
+  role: 'role',
   familyId: 'familyId'
 };
 
@@ -130,6 +131,11 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.FamilyRole = exports.$Enums.FamilyRole = {
+  ADMIN: 'ADMIN',
+  MEMBER: 'MEMBER'
+};
+
 exports.TaskStatus = exports.$Enums.TaskStatus = {
   TODO: 'TODO',
   IN_PROGRESS: 'IN_PROGRESS',
@@ -194,13 +200,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Family {\n  id         Int    @id @default(autoincrement())\n  name       String\n  inviteCode String @unique\n\n  member User[]\n  tasks  Task[]\n}\n\nmodel User {\n  id      Int    @id @default(autoincrement())\n  name    String\n  clerkId String @unique\n\n  tasks    Task[]\n  family   Family? @relation(fields: [familyId], references: [id])\n  familyId Int?\n}\n\nmodel Task {\n  id   Int    @id @default(autoincrement())\n  name String\n\n  status   TaskStatus   @default(TODO)\n  priority TaskPriority @default(MEDIUM)\n  dueDate  DateTime?\n\n  user   User? @relation(fields: [userId], references: [id])\n  userId Int?\n\n  family   Family @relation(fields: [familyId], references: [id])\n  familyId Int\n\n  @@index([familyId, status])\n  @@index([userId, status])\n}\n\nenum TaskStatus {\n  TODO\n  IN_PROGRESS\n  DONE\n}\n\nenum TaskPriority {\n  LOW\n  MEDIUM\n  HIGH\n}\n",
-  "inlineSchemaHash": "6251f515c52345a212f917acd30bf85e0b256f98d7b653ab68ef4dd17aa85c3e",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Family {\n  id         Int    @id @default(autoincrement())\n  name       String\n  inviteCode String @unique\n\n  member User[]\n  tasks  Task[]\n}\n\nmodel User {\n  id      Int        @id @default(autoincrement())\n  name    String\n  clerkId String     @unique\n  role    FamilyRole @default(MEMBER)\n\n  tasks    Task[]\n  family   Family? @relation(fields: [familyId], references: [id])\n  familyId Int?\n}\n\nmodel Task {\n  id   Int    @id @default(autoincrement())\n  name String\n\n  status   TaskStatus   @default(TODO)\n  priority TaskPriority @default(MEDIUM)\n  dueDate  DateTime?\n\n  user   User? @relation(fields: [userId], references: [id])\n  userId Int?\n\n  family   Family @relation(fields: [familyId], references: [id])\n  familyId Int\n\n  @@index([familyId, status])\n  @@index([userId, status])\n}\n\nenum FamilyRole {\n  ADMIN\n  MEMBER\n}\n\nenum TaskStatus {\n  TODO\n  IN_PROGRESS\n  DONE\n}\n\nenum TaskPriority {\n  LOW\n  MEDIUM\n  HIGH\n}\n",
+  "inlineSchemaHash": "66f03fc19fc4798a3cf4d076575cc7846fbd3d0d84a9efc06d2b3f27cc0bdf2e",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Family\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"inviteCode\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"member\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"FamilyToUser\"},{\"name\":\"tasks\",\"kind\":\"object\",\"type\":\"Task\",\"relationName\":\"FamilyToTask\"}],\"dbName\":null},\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clerkId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tasks\",\"kind\":\"object\",\"type\":\"Task\",\"relationName\":\"TaskToUser\"},{\"name\":\"family\",\"kind\":\"object\",\"type\":\"Family\",\"relationName\":\"FamilyToUser\"},{\"name\":\"familyId\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null},\"Task\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"TaskStatus\"},{\"name\":\"priority\",\"kind\":\"enum\",\"type\":\"TaskPriority\"},{\"name\":\"dueDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"TaskToUser\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"family\",\"kind\":\"object\",\"type\":\"Family\",\"relationName\":\"FamilyToTask\"},{\"name\":\"familyId\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Family\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"inviteCode\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"member\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"FamilyToUser\"},{\"name\":\"tasks\",\"kind\":\"object\",\"type\":\"Task\",\"relationName\":\"FamilyToTask\"}],\"dbName\":null},\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clerkId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"FamilyRole\"},{\"name\":\"tasks\",\"kind\":\"object\",\"type\":\"Task\",\"relationName\":\"TaskToUser\"},{\"name\":\"family\",\"kind\":\"object\",\"type\":\"Family\",\"relationName\":\"FamilyToUser\"},{\"name\":\"familyId\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null},\"Task\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"TaskStatus\"},{\"name\":\"priority\",\"kind\":\"enum\",\"type\":\"TaskPriority\"},{\"name\":\"dueDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"TaskToUser\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"family\",\"kind\":\"object\",\"type\":\"Family\",\"relationName\":\"FamilyToTask\"},{\"name\":\"familyId\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

@@ -21,9 +21,10 @@ model Family {
 }
 
 model User {
-    id      Int    @id @default(autoincrement())
+    id      Int        @id @default(autoincrement())
     name    String
-    clerkId String @unique
+    clerkId String     @unique
+    role    FamilyRole @default(MEMBER)
 
     tasks    Task[]
     family   Family? @relation(fields: [familyId], references: [id])
@@ -46,6 +47,11 @@ model Task {
 
     @@index([familyId, status])
     @@index([userId, status])
+}
+
+enum FamilyRole {
+    ADMIN
+    MEMBER
 }
 
 enum TaskStatus {

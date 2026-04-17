@@ -33,7 +33,15 @@ export type Task = $Result.DefaultSelection<Prisma.$TaskPayload>
  * Enums
  */
 export namespace $Enums {
-  export const TaskStatus: {
+  export const FamilyRole: {
+  ADMIN: 'ADMIN',
+  MEMBER: 'MEMBER'
+};
+
+export type FamilyRole = (typeof FamilyRole)[keyof typeof FamilyRole]
+
+
+export const TaskStatus: {
   TODO: 'TODO',
   IN_PROGRESS: 'IN_PROGRESS',
   DONE: 'DONE'
@@ -51,6 +59,10 @@ export const TaskPriority: {
 export type TaskPriority = (typeof TaskPriority)[keyof typeof TaskPriority]
 
 }
+
+export type FamilyRole = $Enums.FamilyRole
+
+export const FamilyRole: typeof $Enums.FamilyRole
 
 export type TaskStatus = $Enums.TaskStatus
 
@@ -2276,6 +2288,7 @@ export namespace Prisma {
     id: number | null
     name: string | null
     clerkId: string | null
+    role: $Enums.FamilyRole | null
     familyId: number | null
   }
 
@@ -2283,6 +2296,7 @@ export namespace Prisma {
     id: number | null
     name: string | null
     clerkId: string | null
+    role: $Enums.FamilyRole | null
     familyId: number | null
   }
 
@@ -2290,6 +2304,7 @@ export namespace Prisma {
     id: number
     name: number
     clerkId: number
+    role: number
     familyId: number
     _all: number
   }
@@ -2309,6 +2324,7 @@ export namespace Prisma {
     id?: true
     name?: true
     clerkId?: true
+    role?: true
     familyId?: true
   }
 
@@ -2316,6 +2332,7 @@ export namespace Prisma {
     id?: true
     name?: true
     clerkId?: true
+    role?: true
     familyId?: true
   }
 
@@ -2323,6 +2340,7 @@ export namespace Prisma {
     id?: true
     name?: true
     clerkId?: true
+    role?: true
     familyId?: true
     _all?: true
   }
@@ -2417,6 +2435,7 @@ export namespace Prisma {
     id: number
     name: string
     clerkId: string
+    role: $Enums.FamilyRole
     familyId: number | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
@@ -2443,6 +2462,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     clerkId?: boolean
+    role?: boolean
     familyId?: boolean
     tasks?: boolean | User$tasksArgs<ExtArgs>
     family?: boolean | User$familyArgs<ExtArgs>
@@ -2453,6 +2473,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     clerkId?: boolean
+    role?: boolean
     familyId?: boolean
     family?: boolean | User$familyArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
@@ -2461,6 +2482,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     clerkId?: boolean
+    role?: boolean
     familyId?: boolean
     family?: boolean | User$familyArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
@@ -2469,10 +2491,11 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     clerkId?: boolean
+    role?: boolean
     familyId?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "clerkId" | "familyId", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "clerkId" | "role" | "familyId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tasks?: boolean | User$tasksArgs<ExtArgs>
     family?: boolean | User$familyArgs<ExtArgs>
@@ -2495,6 +2518,7 @@ export namespace Prisma {
       id: number
       name: string
       clerkId: string
+      role: $Enums.FamilyRole
       familyId: number | null
     }, ExtArgs["result"]["user"]>
     composites: {}
@@ -2924,6 +2948,7 @@ export namespace Prisma {
     readonly id: FieldRef<"User", 'Int'>
     readonly name: FieldRef<"User", 'String'>
     readonly clerkId: FieldRef<"User", 'String'>
+    readonly role: FieldRef<"User", 'FamilyRole'>
     readonly familyId: FieldRef<"User", 'Int'>
   }
     
@@ -4562,6 +4587,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     clerkId: 'clerkId',
+    role: 'role',
     familyId: 'familyId'
   };
 
@@ -4635,6 +4661,20 @@ export namespace Prisma {
    * Reference to a field of type 'String[]'
    */
   export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'FamilyRole'
+   */
+  export type EnumFamilyRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FamilyRole'>
+    
+
+
+  /**
+   * Reference to a field of type 'FamilyRole[]'
+   */
+  export type ListEnumFamilyRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FamilyRole[]'>
     
 
 
@@ -4754,6 +4794,7 @@ export namespace Prisma {
     id?: IntFilter<"User"> | number
     name?: StringFilter<"User"> | string
     clerkId?: StringFilter<"User"> | string
+    role?: EnumFamilyRoleFilter<"User"> | $Enums.FamilyRole
     familyId?: IntNullableFilter<"User"> | number | null
     tasks?: TaskListRelationFilter
     family?: XOR<FamilyNullableScalarRelationFilter, FamilyWhereInput> | null
@@ -4763,6 +4804,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     clerkId?: SortOrder
+    role?: SortOrder
     familyId?: SortOrderInput | SortOrder
     tasks?: TaskOrderByRelationAggregateInput
     family?: FamilyOrderByWithRelationInput
@@ -4775,6 +4817,7 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     name?: StringFilter<"User"> | string
+    role?: EnumFamilyRoleFilter<"User"> | $Enums.FamilyRole
     familyId?: IntNullableFilter<"User"> | number | null
     tasks?: TaskListRelationFilter
     family?: XOR<FamilyNullableScalarRelationFilter, FamilyWhereInput> | null
@@ -4784,6 +4827,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     clerkId?: SortOrder
+    role?: SortOrder
     familyId?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
@@ -4799,6 +4843,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"User"> | number
     name?: StringWithAggregatesFilter<"User"> | string
     clerkId?: StringWithAggregatesFilter<"User"> | string
+    role?: EnumFamilyRoleWithAggregatesFilter<"User"> | $Enums.FamilyRole
     familyId?: IntNullableWithAggregatesFilter<"User"> | number | null
   }
 
@@ -4922,6 +4967,7 @@ export namespace Prisma {
   export type UserCreateInput = {
     name: string
     clerkId: string
+    role?: $Enums.FamilyRole
     tasks?: TaskCreateNestedManyWithoutUserInput
     family?: FamilyCreateNestedOneWithoutMemberInput
   }
@@ -4930,6 +4976,7 @@ export namespace Prisma {
     id?: number
     name: string
     clerkId: string
+    role?: $Enums.FamilyRole
     familyId?: number | null
     tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
   }
@@ -4937,6 +4984,7 @@ export namespace Prisma {
   export type UserUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     clerkId?: StringFieldUpdateOperationsInput | string
+    role?: EnumFamilyRoleFieldUpdateOperationsInput | $Enums.FamilyRole
     tasks?: TaskUpdateManyWithoutUserNestedInput
     family?: FamilyUpdateOneWithoutMemberNestedInput
   }
@@ -4945,6 +4993,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     clerkId?: StringFieldUpdateOperationsInput | string
+    role?: EnumFamilyRoleFieldUpdateOperationsInput | $Enums.FamilyRole
     familyId?: NullableIntFieldUpdateOperationsInput | number | null
     tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -4953,18 +5002,21 @@ export namespace Prisma {
     id?: number
     name: string
     clerkId: string
+    role?: $Enums.FamilyRole
     familyId?: number | null
   }
 
   export type UserUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     clerkId?: StringFieldUpdateOperationsInput | string
+    role?: EnumFamilyRoleFieldUpdateOperationsInput | $Enums.FamilyRole
   }
 
   export type UserUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     clerkId?: StringFieldUpdateOperationsInput | string
+    role?: EnumFamilyRoleFieldUpdateOperationsInput | $Enums.FamilyRole
     familyId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
@@ -5139,6 +5191,13 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type EnumFamilyRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.FamilyRole | EnumFamilyRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.FamilyRole[] | ListEnumFamilyRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FamilyRole[] | ListEnumFamilyRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumFamilyRoleFilter<$PrismaModel> | $Enums.FamilyRole
+  }
+
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -5164,6 +5223,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     clerkId?: SortOrder
+    role?: SortOrder
     familyId?: SortOrder
   }
 
@@ -5176,6 +5236,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     clerkId?: SortOrder
+    role?: SortOrder
     familyId?: SortOrder
   }
 
@@ -5183,12 +5244,23 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     clerkId?: SortOrder
+    role?: SortOrder
     familyId?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
     id?: SortOrder
     familyId?: SortOrder
+  }
+
+  export type EnumFamilyRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FamilyRole | EnumFamilyRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.FamilyRole[] | ListEnumFamilyRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FamilyRole[] | ListEnumFamilyRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumFamilyRoleWithAggregatesFilter<$PrismaModel> | $Enums.FamilyRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFamilyRoleFilter<$PrismaModel>
+    _max?: NestedEnumFamilyRoleFilter<$PrismaModel>
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -5434,6 +5506,10 @@ export namespace Prisma {
     connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
   }
 
+  export type EnumFamilyRoleFieldUpdateOperationsInput = {
+    set?: $Enums.FamilyRole
+  }
+
   export type TaskUpdateManyWithoutUserNestedInput = {
     create?: XOR<TaskCreateWithoutUserInput, TaskUncheckedCreateWithoutUserInput> | TaskCreateWithoutUserInput[] | TaskUncheckedCreateWithoutUserInput[]
     connectOrCreate?: TaskCreateOrConnectWithoutUserInput | TaskCreateOrConnectWithoutUserInput[]
@@ -5591,6 +5667,13 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type NestedEnumFamilyRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.FamilyRole | EnumFamilyRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.FamilyRole[] | ListEnumFamilyRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FamilyRole[] | ListEnumFamilyRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumFamilyRoleFilter<$PrismaModel> | $Enums.FamilyRole
+  }
+
   export type NestedIntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -5600,6 +5683,16 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumFamilyRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FamilyRole | EnumFamilyRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.FamilyRole[] | ListEnumFamilyRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FamilyRole[] | ListEnumFamilyRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumFamilyRoleWithAggregatesFilter<$PrismaModel> | $Enums.FamilyRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFamilyRoleFilter<$PrismaModel>
+    _max?: NestedEnumFamilyRoleFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -5691,6 +5784,7 @@ export namespace Prisma {
   export type UserCreateWithoutFamilyInput = {
     name: string
     clerkId: string
+    role?: $Enums.FamilyRole
     tasks?: TaskCreateNestedManyWithoutUserInput
   }
 
@@ -5698,6 +5792,7 @@ export namespace Prisma {
     id?: number
     name: string
     clerkId: string
+    role?: $Enums.FamilyRole
     tasks?: TaskUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -5761,6 +5856,7 @@ export namespace Prisma {
     id?: IntFilter<"User"> | number
     name?: StringFilter<"User"> | string
     clerkId?: StringFilter<"User"> | string
+    role?: EnumFamilyRoleFilter<"User"> | $Enums.FamilyRole
     familyId?: IntNullableFilter<"User"> | number | null
   }
 
@@ -5881,6 +5977,7 @@ export namespace Prisma {
   export type UserCreateWithoutTasksInput = {
     name: string
     clerkId: string
+    role?: $Enums.FamilyRole
     family?: FamilyCreateNestedOneWithoutMemberInput
   }
 
@@ -5888,6 +5985,7 @@ export namespace Prisma {
     id?: number
     name: string
     clerkId: string
+    role?: $Enums.FamilyRole
     familyId?: number | null
   }
 
@@ -5928,6 +6026,7 @@ export namespace Prisma {
   export type UserUpdateWithoutTasksInput = {
     name?: StringFieldUpdateOperationsInput | string
     clerkId?: StringFieldUpdateOperationsInput | string
+    role?: EnumFamilyRoleFieldUpdateOperationsInput | $Enums.FamilyRole
     family?: FamilyUpdateOneWithoutMemberNestedInput
   }
 
@@ -5935,6 +6034,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     clerkId?: StringFieldUpdateOperationsInput | string
+    role?: EnumFamilyRoleFieldUpdateOperationsInput | $Enums.FamilyRole
     familyId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
@@ -5966,6 +6066,7 @@ export namespace Prisma {
     id?: number
     name: string
     clerkId: string
+    role?: $Enums.FamilyRole
   }
 
   export type TaskCreateManyFamilyInput = {
@@ -5980,6 +6081,7 @@ export namespace Prisma {
   export type UserUpdateWithoutFamilyInput = {
     name?: StringFieldUpdateOperationsInput | string
     clerkId?: StringFieldUpdateOperationsInput | string
+    role?: EnumFamilyRoleFieldUpdateOperationsInput | $Enums.FamilyRole
     tasks?: TaskUpdateManyWithoutUserNestedInput
   }
 
@@ -5987,6 +6089,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     clerkId?: StringFieldUpdateOperationsInput | string
+    role?: EnumFamilyRoleFieldUpdateOperationsInput | $Enums.FamilyRole
     tasks?: TaskUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -5994,6 +6097,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     clerkId?: StringFieldUpdateOperationsInput | string
+    role?: EnumFamilyRoleFieldUpdateOperationsInput | $Enums.FamilyRole
   }
 
   export type TaskUpdateWithoutFamilyInput = {
