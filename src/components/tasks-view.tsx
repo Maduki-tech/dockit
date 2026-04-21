@@ -16,10 +16,19 @@ import {
     ArrowUpDown,
     User,
     Flag,
+    MoreVertical,
+    CalendarDays,
 } from 'lucide-react';
 import { Badge } from '~/components/ui/badge';
 import { Input } from '~/components/ui/input';
 import { Button } from '~/components/ui/button';
+import { Calendar } from '~/components/ui/calendar';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from '~/components/ui/dialog';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -28,6 +37,10 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
     DropdownMenuCheckboxItem,
+    DropdownMenuGroup,
+    DropdownMenuSub,
+    DropdownMenuSubTrigger,
+    DropdownMenuSubContent,
 } from '~/components/ui/dropdown-menu';
 import {
     ContextMenu,
@@ -236,7 +249,10 @@ export function TasksView() {
                     return aName.localeCompare(bName);
                 }
                 default:
-                    return STATUS_ORDER[a.status] - STATUS_ORDER[b.status];
+                    return (
+                        STATUS_ORDER[a.status] - STATUS_ORDER[b.status] ||
+                        PRIORITY_CONFIG[a.priority].sortOrder - PRIORITY_CONFIG[b.priority].sortOrder
+                    );
             }
         });
 
@@ -293,12 +309,15 @@ export function TasksView() {
 
     // ── Row ───────────────────────────────────────────────────────────────
     function TaskRow({ task }: { task: Task }) {
+        const [datePickerOpen, setDatePickerOpen] = useState(false);
+        const selectedDate = task.dueDate ? new Date(task.dueDate) : undefined;
         const isOverdue =
             task.dueDate &&
             new Date(task.dueDate) < new Date() &&
             task.status !== TaskStatus.DONE;
 
         return (
+            <>
             <ContextMenu>
                 <ContextMenuTrigger asChild>
                     <div className="group border-border/50 hover:bg-muted/30 flex cursor-default items-center gap-3 border-b px-2 py-3 last:border-0 transition-colors">
@@ -360,18 +379,178 @@ export function TasksView() {
                                 {PRIORITY_CONFIG[task.priority].label}
                             </Badge>
 
-                            {task.user ? (
-                                <UserAvatar
-                                    name={task.user.name}
-                                    id={task.user.id}
-                                />
-                            ) : (
-                                <div
-                                    className="border-muted-foreground/20 h-7 w-7 flex-shrink-0 rounded-full border-2 border-dashed"
-                                    title="Unassigned"
-                                />
-                            )}
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <button
+                                        className="rounded-full transition-opacity hover:opacity-75"
+                                        onClick={(e) => e.stopPropagation()}
+                                        title={task.user ? task.user.name : 'Assign…'}
+                                    >
+                                        {task.user ? (
+                                            <UserAvatar
+                                                name={task.user.name}
+                                                id={task.user.id}
+                                            />
+                                        ) : (
+                                            <div className="border-muted-foreground/20 hover:border-muted-foreground/50 h-7 w-7 flex-shrink-0 rounded-full border-2 border-dashed transition-colors" />
+                                        )}
+                                    </button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    <DropdownMenuLabel>Assign to</DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                        onSelect={() => updateTask.mutate({ id: task.id, userId: null })}
+                                        className="gap-2"
+                                    >
+                                        <div className="border-muted-foreground/30 h-5 w-5 rounded-full border-2 border-dashed" />
+                                        Unassigned
+                                        {!task.user && <Check className="ml-auto h-3.5 w-3.5" />}
+                                    </DropdownMenuItem>
+                                    {members.map((member) => (
+                                        <DropdownMenuItem
+                                            key={member.id}
+                                            onSelect={() => updateTask.mutate({ id: task.id, userId: member.id })}
+                                            className="gap-2"
+                                        >
+                                            <UserAvatar name={member.name} id={member.id} />
+                                            {member.name}
+                                            {task.user?.id === member.id && <Check className="ml-auto h-3.5 w-3.5" />}
+                                        </DropdownMenuItem>
+                                    ))}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </div>
+
+                        {/* Three-dot menu */}
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <button
+                                    className="text-muted-foreground/40 hover:text-foreground flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-md transition-colors"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <MoreVertical className="h-4 w-4" />
+                                </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-52">
+                                <DropdownMenuGroup>
+                                    <DropdownMenuSub>
+                                        <DropdownMenuSubTrigger>
+                                            <CircleDot className="mr-2 h-4 w-4" />
+                                            Set status
+                                        </DropdownMenuSubTrigger>
+                                        <DropdownMenuSubContent>
+                                            {Object.values(TaskStatus).map((s) => (
+                                                <DropdownMenuItem
+                                                    key={s}
+                                                    onSelect={() =>
+                                                        updateTask.mutate({
+                                                            id: task.id,
+                                                            status: s,
+                                                        })
+                                                    }
+                                                    className="gap-2"
+                                                >
+                                                    <StatusIcon status={s} />
+                                                    {STATUS_CONFIG[s].label}
+                                                    {task.status === s && (
+                                                        <Check className="ml-auto h-3.5 w-3.5" />
+                                                    )}
+                                                </DropdownMenuItem>
+                                            ))}
+                                        </DropdownMenuSubContent>
+                                    </DropdownMenuSub>
+
+                                    <DropdownMenuSub>
+                                        <DropdownMenuSubTrigger>
+                                            <Flag className="mr-2 h-4 w-4" />
+                                            Set priority
+                                        </DropdownMenuSubTrigger>
+                                        <DropdownMenuSubContent>
+                                            {Object.values(TaskPriority).map((p) => (
+                                                <DropdownMenuItem
+                                                    key={p}
+                                                    onSelect={() =>
+                                                        updateTask.mutate({
+                                                            id: task.id,
+                                                            priority: p,
+                                                        })
+                                                    }
+                                                    className="gap-2"
+                                                >
+                                                    <span
+                                                        className={cn(
+                                                            'h-2 w-2 flex-shrink-0 rounded-full',
+                                                            PRIORITY_CONFIG[p].dotColor
+                                                        )}
+                                                    />
+                                                    {PRIORITY_CONFIG[p].label}
+                                                    {task.priority === p && (
+                                                        <Check className="ml-auto h-3.5 w-3.5" />
+                                                    )}
+                                                </DropdownMenuItem>
+                                            ))}
+                                        </DropdownMenuSubContent>
+                                    </DropdownMenuSub>
+
+                                    <DropdownMenuSub>
+                                        <DropdownMenuSubTrigger>
+                                            <User className="mr-2 h-4 w-4" />
+                                            Assign to…
+                                        </DropdownMenuSubTrigger>
+                                        <DropdownMenuSubContent>
+                                            <DropdownMenuItem
+                                                onSelect={() =>
+                                                    updateTask.mutate({
+                                                        id: task.id,
+                                                        userId: null,
+                                                    })
+                                                }
+                                            >
+                                                Unassigned
+                                                {!task.user && (
+                                                    <Check className="ml-auto h-3.5 w-3.5" />
+                                                )}
+                                            </DropdownMenuItem>
+                                            {members.map((member) => (
+                                                <DropdownMenuItem
+                                                    key={member.id}
+                                                    onSelect={() =>
+                                                        updateTask.mutate({
+                                                            id: task.id,
+                                                            userId: member.id,
+                                                        })
+                                                    }
+                                                >
+                                                    {member.name ?? 'Unknown'}
+                                                    {task.user?.id === member.id && (
+                                                        <Check className="ml-auto h-3.5 w-3.5" />
+                                                    )}
+                                                </DropdownMenuItem>
+                                            ))}
+                                        </DropdownMenuSubContent>
+                                    </DropdownMenuSub>
+
+                                    <DropdownMenuItem
+                                        onSelect={() => setDatePickerOpen(true)}
+                                        className="gap-2"
+                                    >
+                                        <CalendarDays className="h-4 w-4" />
+                                        Set due date
+                                    </DropdownMenuItem>
+                                </DropdownMenuGroup>
+
+                                <DropdownMenuSeparator />
+
+                                <DropdownMenuItem
+                                    className="text-destructive focus:text-destructive gap-2"
+                                    onSelect={() => deleteTask.mutate({ id: task.id })}
+                                >
+                                    <Trash2 className="h-4 w-4" />
+                                    Delete task
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 </ContextMenuTrigger>
 
@@ -473,6 +652,14 @@ export function TasksView() {
                                 ))}
                             </ContextMenuSubContent>
                         </ContextMenuSub>
+
+                        <ContextMenuItem
+                            onSelect={() => setDatePickerOpen(true)}
+                            className="gap-2"
+                        >
+                            <CalendarDays className="h-4 w-4" />
+                            Set due date
+                        </ContextMenuItem>
                     </ContextMenuGroup>
 
                     <ContextMenuSeparator />
@@ -486,6 +673,48 @@ export function TasksView() {
                     </ContextMenuItem>
                 </ContextMenuContent>
             </ContextMenu>
+
+            <Dialog open={datePickerOpen} onOpenChange={setDatePickerOpen}>
+                <DialogContent className="w-auto p-4">
+                    <DialogHeader>
+                        <DialogTitle>Set due date</DialogTitle>
+                    </DialogHeader>
+                    <Calendar
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={(date) => {
+                            if (date) {
+                                date.setHours(23, 59, 59, 0);
+                                updateTask.mutate({
+                                    id: task.id,
+                                    dueDate: date.toISOString(),
+                                });
+                            } else {
+                                updateTask.mutate({
+                                    id: task.id,
+                                    dueDate: null,
+                                });
+                            }
+                            setDatePickerOpen(false);
+                        }}
+                        initialFocus
+                    />
+                    {task.dueDate && (
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-destructive hover:text-destructive w-full"
+                            onClick={() => {
+                                updateTask.mutate({ id: task.id, dueDate: null });
+                                setDatePickerOpen(false);
+                            }}
+                        >
+                            Clear date
+                        </Button>
+                    )}
+                </DialogContent>
+            </Dialog>
+            </>
         );
     }
 

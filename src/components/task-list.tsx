@@ -1,10 +1,19 @@
 'use client';
 
+import { useState } from 'react';
 import { api } from '~/trpc/react';
 import { toast } from 'sonner';
 import { TaskStatus } from '../../generated/prisma';
 import { cn } from '~/lib/utils';
-import { Check } from 'lucide-react';
+import { Check, MoreVertical, CalendarDays } from 'lucide-react';
+import { Calendar } from '~/components/ui/calendar';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from '~/components/ui/dialog';
+import { Button } from '~/components/ui/button';
 import {
     ContextMenuTrigger,
     ContextMenu,
@@ -15,6 +24,16 @@ import {
     ContextMenuSubTrigger,
     ContextMenuSubContent,
 } from './ui/context-menu';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuSub,
+    DropdownMenuSubTrigger,
+    DropdownMenuSubContent,
+    DropdownMenuTrigger,
+} from './ui/dropdown-menu';
 
 const AVATAR_COLORS = [
     'bg-blue-100 text-blue-700',
@@ -100,7 +119,46 @@ export function TaskList() {
         task: (typeof tasks)[number];
         isLast: boolean;
     }) {
+        const [datePickerOpen, setDatePickerOpen] = useState(false);
+        const selectedDate = task.dueDate ? new Date(task.dueDate) : undefined;
+
+        const taskMenuItems = (
+            <>
+                <DropdownMenuGroup>
+                    <DropdownMenuSub>
+                        <DropdownMenuSubTrigger>
+                            Assign to…
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuSubContent>
+                            {membersOfFamily?.map((member) => (
+                                <DropdownMenuItem
+                                    key={member.id}
+                                    onSelect={() =>
+                                        updateTask.mutate({
+                                            id: task.id,
+                                            userId: member.id,
+                                        })
+                                    }
+                                >
+                                    {member.name ?? 'Unknown'}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuSubContent>
+                    </DropdownMenuSub>
+
+                    <DropdownMenuItem
+                        onSelect={() => setDatePickerOpen(true)}
+                        className="gap-2"
+                    >
+                        <CalendarDays className="h-4 w-4" />
+                        Set due date
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
+            </>
+        );
+
         return (
+            <>
             <ContextMenu>
                 <ContextMenuTrigger asChild>
                     <div
@@ -153,6 +211,20 @@ export function TaskList() {
                         ) : (
                             <div className="border-muted-foreground/20 h-7 w-7 flex-shrink-0 rounded-full border-2 border-dashed" />
                         )}
+
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <button
+                                    className="text-muted-foreground/40 hover:text-foreground flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-md transition-colors"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <MoreVertical className="h-4 w-4" />
+                                </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                {taskMenuItems}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 </ContextMenuTrigger>
                 <ContextMenuContent>
@@ -177,9 +249,59 @@ export function TaskList() {
                                 ))}
                             </ContextMenuSubContent>
                         </ContextMenuSub>
+
+                        <ContextMenuItem
+                            onSelect={() => setDatePickerOpen(true)}
+                            className="gap-2"
+                        >
+                            <CalendarDays className="h-4 w-4" />
+                            Set due date
+                        </ContextMenuItem>
                     </ContextMenuGroup>
                 </ContextMenuContent>
             </ContextMenu>
+
+            <Dialog open={datePickerOpen} onOpenChange={setDatePickerOpen}>
+                <DialogContent className="w-auto p-4">
+                    <DialogHeader>
+                        <DialogTitle>Set due date</DialogTitle>
+                    </DialogHeader>
+                    <Calendar
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={(date) => {
+                            if (date) {
+                                date.setHours(23, 59, 59, 0);
+                                updateTask.mutate({
+                                    id: task.id,
+                                    dueDate: date.toISOString(),
+                                });
+                            } else {
+                                updateTask.mutate({
+                                    id: task.id,
+                                    dueDate: null,
+                                });
+                            }
+                            setDatePickerOpen(false);
+                        }}
+                        initialFocus
+                    />
+                    {task.dueDate && (
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-destructive hover:text-destructive w-full"
+                            onClick={() => {
+                                updateTask.mutate({ id: task.id, dueDate: null });
+                                setDatePickerOpen(false);
+                            }}
+                        >
+                            Clear date
+                        </Button>
+                    )}
+                </DialogContent>
+            </Dialog>
+            </>
         );
     }
 

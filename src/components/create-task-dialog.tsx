@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { api } from '~/trpc/react';
 import {
     Dialog,
@@ -10,7 +10,13 @@ import {
 } from '~/components/ui/dialog';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
-import { Plus, Calendar, ArrowUp, Minus, ArrowDown } from 'lucide-react';
+import { Plus, CalendarDays, ArrowUp, Minus, ArrowDown, X } from 'lucide-react';
+import { Calendar } from '~/components/ui/calendar';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '~/components/ui/popover';
 import { toast } from 'sonner';
 import { TaskPriority } from '../../generated/prisma';
 import { cn } from '~/lib/utils';
@@ -64,7 +70,7 @@ export function CreateTaskDialog() {
     const [name, setName] = useState('');
     const [assigneeId, setAssigneeId] = useState<string>('');
     const [priority, setPriority] = useState<TaskPriority>(TaskPriority.MEDIUM);
-    const [dueDate, setDueDate] = useState<string>('');
+    const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
 
     const { data: me } = api.user.me.useQuery();
     const { data: members = [] } = api.family.getMembersOfFamily.useQuery(
@@ -72,12 +78,6 @@ export function CreateTaskDialog() {
         { enabled: !!me?.familyId }
     );
 
-    // Pre-select the current user when the dialog opens
-    useEffect(() => {
-        if (open && me?.id) {
-            setAssigneeId(String(me.id));
-        }
-    }, [open, me?.id]);
 
     const utils = api.useUtils();
     const createTask = api.task.create.useMutation({
@@ -98,7 +98,7 @@ export function CreateTaskDialog() {
             name: name.trim(),
             userId: assigneeId ? Number(assigneeId) : undefined,
             priority,
-            dueDate: dueDate ? new Date(dueDate).toISOString() : undefined,
+            dueDate: dueDate ? dueDate.toISOString() : undefined,
         });
     }
 
@@ -107,7 +107,7 @@ export function CreateTaskDialog() {
             setName('');
             setAssigneeId('');
             setPriority(TaskPriority.MEDIUM);
-            setDueDate('');
+            setDueDate(undefined);
         }
         setOpen(next);
     }
@@ -120,15 +120,15 @@ export function CreateTaskDialog() {
                     New task
                 </Button>
             </DialogTrigger>
-            <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-sm">
-                <DialogTitle className="p-5 text-base font-medium">
+            <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-lg">
+                <DialogTitle className="px-6 pt-6 pb-1 text-lg font-semibold">
                     Create new task
                 </DialogTitle>
                 <form onSubmit={handleSubmit}>
                     {/* Task name */}
-                    <div className="px-5 pt-5 pb-4">
+                    <div className="px-6 pt-4 pb-5">
                         <textarea
-                            rows={2}
+                            rows={1}
                             placeholder="What needs to be done?"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
@@ -140,13 +140,13 @@ export function CreateTaskDialog() {
                     <div className="border-border/60 border-t" />
 
                     {/* Options row */}
-                    <div className="space-y-3 px-5 py-3">
+                    <div className="space-y-4 px-6 py-5">
                         {/* Priority */}
-                        <div className="flex items-center gap-2">
-                            <span className="text-muted-foreground w-16 shrink-0 text-xs">
+                        <div className="flex items-center gap-3">
+                            <span className="text-muted-foreground w-20 shrink-0 text-sm">
                                 Priority
                             </span>
-                            <div className="flex gap-1.5">
+                            <div className="flex gap-2">
                                 {PRIORITY_OPTIONS.map(
                                     ({
                                         value,
@@ -175,25 +175,58 @@ export function CreateTaskDialog() {
                         </div>
 
                         {/* Due date */}
-                        <div className="flex items-center gap-2">
-                            <span className="text-muted-foreground w-16 shrink-0 text-xs">
+                        <div className="flex items-center gap-3">
+                            <span className="text-muted-foreground w-20 shrink-0 text-sm">
                                 Due
                             </span>
-                            <div className="relative flex flex-1 items-center">
-                                <Calendar className="text-muted-foreground pointer-events-none absolute left-2 h-3.5 w-3.5" />
-                                <Input
-                                    type="date"
-                                    value={dueDate}
-                                    onChange={(e) => setDueDate(e.target.value)}
-                                    className="border-border/60 h-7 w-full pr-2 pl-7 text-xs"
-                                />
+                            <div className="flex items-center gap-1">
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <button
+                                            type="button"
+                                            className={cn(
+                                                'border-border/60 flex h-7 items-center gap-1.5 rounded-md border px-2.5 text-xs transition-colors',
+                                                dueDate
+                                                    ? 'text-foreground'
+                                                    : 'text-muted-foreground'
+                                            )}
+                                        >
+                                            <CalendarDays className="h-3.5 w-3.5" />
+                                            {dueDate
+                                                ? dueDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                                                : 'Pick a date'}
+                                        </button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-auto p-0" align="start">
+                                        <Calendar
+                                            mode="single"
+                                            selected={dueDate}
+                                            onSelect={(date) => {
+                                                if (date) {
+                                                    date.setHours(23, 59, 59, 0);
+                                                }
+                                                setDueDate(date ?? undefined);
+                                            }}
+                                            initialFocus
+                                        />
+                                    </PopoverContent>
+                                </Popover>
+                                {dueDate && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setDueDate(undefined)}
+                                        className="text-muted-foreground hover:text-foreground transition-colors"
+                                    >
+                                        <X className="h-3.5 w-3.5" />
+                                    </button>
+                                )}
                             </div>
                         </div>
 
                         {/* Assignee */}
                         {members.length > 0 && (
-                            <div className="flex items-center gap-2">
-                                <span className="text-muted-foreground w-16 shrink-0 text-xs">
+                            <div className="flex items-center gap-3">
+                                <span className="text-muted-foreground w-20 shrink-0 text-sm">
                                     Assign
                                 </span>
                                 <div className="flex gap-1.5">
@@ -238,7 +271,7 @@ export function CreateTaskDialog() {
                     <div className="border-border/60 border-t" />
 
                     {/* Footer */}
-                    <div className="flex justify-end gap-2 px-5 py-3">
+                    <div className="flex justify-end gap-2 px-6 py-4">
                         <Button
                             type="button"
                             variant="ghost"
