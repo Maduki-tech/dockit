@@ -28,6 +28,11 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  * 
  */
 export type Task = $Result.DefaultSelection<Prisma.$TaskPayload>
+/**
+ * Model Attachment
+ * 
+ */
+export type Attachment = $Result.DefaultSelection<Prisma.$AttachmentPayload>
 
 /**
  * Enums
@@ -219,6 +224,16 @@ export class PrismaClient<
     * ```
     */
   get task(): Prisma.TaskDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.attachment`: Exposes CRUD operations for the **Attachment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Attachments
+    * const attachments = await prisma.attachment.findMany()
+    * ```
+    */
+  get attachment(): Prisma.AttachmentDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -662,7 +677,8 @@ export namespace Prisma {
   export const ModelName: {
     Family: 'Family',
     User: 'User',
-    Task: 'Task'
+    Task: 'Task',
+    Attachment: 'Attachment'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -681,7 +697,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "family" | "user" | "task"
+      modelProps: "family" | "user" | "task" | "attachment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -907,6 +923,80 @@ export namespace Prisma {
           }
         }
       }
+      Attachment: {
+        payload: Prisma.$AttachmentPayload<ExtArgs>
+        fields: Prisma.AttachmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AttachmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AttachmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentPayload>
+          }
+          findFirst: {
+            args: Prisma.AttachmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AttachmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentPayload>
+          }
+          findMany: {
+            args: Prisma.AttachmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentPayload>[]
+          }
+          create: {
+            args: Prisma.AttachmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentPayload>
+          }
+          createMany: {
+            args: Prisma.AttachmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AttachmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentPayload>[]
+          }
+          delete: {
+            args: Prisma.AttachmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentPayload>
+          }
+          update: {
+            args: Prisma.AttachmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.AttachmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AttachmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AttachmentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentPayload>[]
+          }
+          upsert: {
+            args: Prisma.AttachmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentPayload>
+          }
+          aggregate: {
+            args: Prisma.AttachmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAttachment>
+          }
+          groupBy: {
+            args: Prisma.AttachmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AttachmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AttachmentCountArgs<ExtArgs>
+            result: $Utils.Optional<AttachmentCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1006,6 +1096,7 @@ export namespace Prisma {
     family?: FamilyOmit
     user?: UserOmit
     task?: TaskOmit
+    attachment?: AttachmentOmit
   }
 
   /* Types for Logging */
@@ -1149,6 +1240,37 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TaskWhereInput
+  }
+
+
+  /**
+   * Count Type TaskCountOutputType
+   */
+
+  export type TaskCountOutputType = {
+    attachments: number
+  }
+
+  export type TaskCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    attachments?: boolean | TaskCountOutputTypeCountAttachmentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TaskCountOutputType without action
+   */
+  export type TaskCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TaskCountOutputType
+     */
+    select?: TaskCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TaskCountOutputType without action
+   */
+  export type TaskCountOutputTypeCountAttachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AttachmentWhereInput
   }
 
 
@@ -3434,6 +3556,7 @@ export namespace Prisma {
   export type TaskMinAggregateOutputType = {
     id: number | null
     name: string | null
+    description: string | null
     status: $Enums.TaskStatus | null
     priority: $Enums.TaskPriority | null
     dueDate: Date | null
@@ -3444,6 +3567,7 @@ export namespace Prisma {
   export type TaskMaxAggregateOutputType = {
     id: number | null
     name: string | null
+    description: string | null
     status: $Enums.TaskStatus | null
     priority: $Enums.TaskPriority | null
     dueDate: Date | null
@@ -3454,6 +3578,7 @@ export namespace Prisma {
   export type TaskCountAggregateOutputType = {
     id: number
     name: number
+    description: number
     status: number
     priority: number
     dueDate: number
@@ -3478,6 +3603,7 @@ export namespace Prisma {
   export type TaskMinAggregateInputType = {
     id?: true
     name?: true
+    description?: true
     status?: true
     priority?: true
     dueDate?: true
@@ -3488,6 +3614,7 @@ export namespace Prisma {
   export type TaskMaxAggregateInputType = {
     id?: true
     name?: true
+    description?: true
     status?: true
     priority?: true
     dueDate?: true
@@ -3498,6 +3625,7 @@ export namespace Prisma {
   export type TaskCountAggregateInputType = {
     id?: true
     name?: true
+    description?: true
     status?: true
     priority?: true
     dueDate?: true
@@ -3595,6 +3723,7 @@ export namespace Prisma {
   export type TaskGroupByOutputType = {
     id: number
     name: string
+    description: string | null
     status: $Enums.TaskStatus
     priority: $Enums.TaskPriority
     dueDate: Date | null
@@ -3624,6 +3753,7 @@ export namespace Prisma {
   export type TaskSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    description?: boolean
     status?: boolean
     priority?: boolean
     dueDate?: boolean
@@ -3631,11 +3761,14 @@ export namespace Prisma {
     familyId?: boolean
     user?: boolean | Task$userArgs<ExtArgs>
     family?: boolean | FamilyDefaultArgs<ExtArgs>
+    attachments?: boolean | Task$attachmentsArgs<ExtArgs>
+    _count?: boolean | TaskCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["task"]>
 
   export type TaskSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    description?: boolean
     status?: boolean
     priority?: boolean
     dueDate?: boolean
@@ -3648,6 +3781,7 @@ export namespace Prisma {
   export type TaskSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    description?: boolean
     status?: boolean
     priority?: boolean
     dueDate?: boolean
@@ -3660,6 +3794,7 @@ export namespace Prisma {
   export type TaskSelectScalar = {
     id?: boolean
     name?: boolean
+    description?: boolean
     status?: boolean
     priority?: boolean
     dueDate?: boolean
@@ -3667,10 +3802,12 @@ export namespace Prisma {
     familyId?: boolean
   }
 
-  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "status" | "priority" | "dueDate" | "userId" | "familyId", ExtArgs["result"]["task"]>
+  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "status" | "priority" | "dueDate" | "userId" | "familyId", ExtArgs["result"]["task"]>
   export type TaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Task$userArgs<ExtArgs>
     family?: boolean | FamilyDefaultArgs<ExtArgs>
+    attachments?: boolean | Task$attachmentsArgs<ExtArgs>
+    _count?: boolean | TaskCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TaskIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Task$userArgs<ExtArgs>
@@ -3686,10 +3823,12 @@ export namespace Prisma {
     objects: {
       user: Prisma.$UserPayload<ExtArgs> | null
       family: Prisma.$FamilyPayload<ExtArgs>
+      attachments: Prisma.$AttachmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       name: string
+      description: string | null
       status: $Enums.TaskStatus
       priority: $Enums.TaskPriority
       dueDate: Date | null
@@ -4091,6 +4230,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends Task$userArgs<ExtArgs> = {}>(args?: Subset<T, Task$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     family<T extends FamilyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FamilyDefaultArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    attachments<T extends Task$attachmentsArgs<ExtArgs> = {}>(args?: Subset<T, Task$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4122,6 +4262,7 @@ export namespace Prisma {
   interface TaskFieldRefs {
     readonly id: FieldRef<"Task", 'Int'>
     readonly name: FieldRef<"Task", 'String'>
+    readonly description: FieldRef<"Task", 'String'>
     readonly status: FieldRef<"Task", 'TaskStatus'>
     readonly priority: FieldRef<"Task", 'TaskPriority'>
     readonly dueDate: FieldRef<"Task", 'DateTime'>
@@ -4542,6 +4683,30 @@ export namespace Prisma {
   }
 
   /**
+   * Task.attachments
+   */
+  export type Task$attachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachment
+     */
+    select?: AttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachment
+     */
+    omit?: AttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentInclude<ExtArgs> | null
+    where?: AttachmentWhereInput
+    orderBy?: AttachmentOrderByWithRelationInput | AttachmentOrderByWithRelationInput[]
+    cursor?: AttachmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AttachmentScalarFieldEnum | AttachmentScalarFieldEnum[]
+  }
+
+  /**
    * Task without action
    */
   export type TaskDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4557,6 +4722,1145 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: TaskInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Attachment
+   */
+
+  export type AggregateAttachment = {
+    _count: AttachmentCountAggregateOutputType | null
+    _avg: AttachmentAvgAggregateOutputType | null
+    _sum: AttachmentSumAggregateOutputType | null
+    _min: AttachmentMinAggregateOutputType | null
+    _max: AttachmentMaxAggregateOutputType | null
+  }
+
+  export type AttachmentAvgAggregateOutputType = {
+    id: number | null
+    taskId: number | null
+    fileSize: number | null
+  }
+
+  export type AttachmentSumAggregateOutputType = {
+    id: number | null
+    taskId: number | null
+    fileSize: number | null
+  }
+
+  export type AttachmentMinAggregateOutputType = {
+    id: number | null
+    taskId: number | null
+    fileName: string | null
+    fileUrl: string | null
+    fileKey: string | null
+    fileType: string | null
+    fileSize: number | null
+    uploadedAt: Date | null
+  }
+
+  export type AttachmentMaxAggregateOutputType = {
+    id: number | null
+    taskId: number | null
+    fileName: string | null
+    fileUrl: string | null
+    fileKey: string | null
+    fileType: string | null
+    fileSize: number | null
+    uploadedAt: Date | null
+  }
+
+  export type AttachmentCountAggregateOutputType = {
+    id: number
+    taskId: number
+    fileName: number
+    fileUrl: number
+    fileKey: number
+    fileType: number
+    fileSize: number
+    uploadedAt: number
+    _all: number
+  }
+
+
+  export type AttachmentAvgAggregateInputType = {
+    id?: true
+    taskId?: true
+    fileSize?: true
+  }
+
+  export type AttachmentSumAggregateInputType = {
+    id?: true
+    taskId?: true
+    fileSize?: true
+  }
+
+  export type AttachmentMinAggregateInputType = {
+    id?: true
+    taskId?: true
+    fileName?: true
+    fileUrl?: true
+    fileKey?: true
+    fileType?: true
+    fileSize?: true
+    uploadedAt?: true
+  }
+
+  export type AttachmentMaxAggregateInputType = {
+    id?: true
+    taskId?: true
+    fileName?: true
+    fileUrl?: true
+    fileKey?: true
+    fileType?: true
+    fileSize?: true
+    uploadedAt?: true
+  }
+
+  export type AttachmentCountAggregateInputType = {
+    id?: true
+    taskId?: true
+    fileName?: true
+    fileUrl?: true
+    fileKey?: true
+    fileType?: true
+    fileSize?: true
+    uploadedAt?: true
+    _all?: true
+  }
+
+  export type AttachmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Attachment to aggregate.
+     */
+    where?: AttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Attachments to fetch.
+     */
+    orderBy?: AttachmentOrderByWithRelationInput | AttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Attachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Attachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Attachments
+    **/
+    _count?: true | AttachmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AttachmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AttachmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AttachmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AttachmentMaxAggregateInputType
+  }
+
+  export type GetAttachmentAggregateType<T extends AttachmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateAttachment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAttachment[P]>
+      : GetScalarType<T[P], AggregateAttachment[P]>
+  }
+
+
+
+
+  export type AttachmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AttachmentWhereInput
+    orderBy?: AttachmentOrderByWithAggregationInput | AttachmentOrderByWithAggregationInput[]
+    by: AttachmentScalarFieldEnum[] | AttachmentScalarFieldEnum
+    having?: AttachmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AttachmentCountAggregateInputType | true
+    _avg?: AttachmentAvgAggregateInputType
+    _sum?: AttachmentSumAggregateInputType
+    _min?: AttachmentMinAggregateInputType
+    _max?: AttachmentMaxAggregateInputType
+  }
+
+  export type AttachmentGroupByOutputType = {
+    id: number
+    taskId: number
+    fileName: string
+    fileUrl: string
+    fileKey: string
+    fileType: string
+    fileSize: number
+    uploadedAt: Date
+    _count: AttachmentCountAggregateOutputType | null
+    _avg: AttachmentAvgAggregateOutputType | null
+    _sum: AttachmentSumAggregateOutputType | null
+    _min: AttachmentMinAggregateOutputType | null
+    _max: AttachmentMaxAggregateOutputType | null
+  }
+
+  type GetAttachmentGroupByPayload<T extends AttachmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AttachmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AttachmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AttachmentGroupByOutputType[P]>
+            : GetScalarType<T[P], AttachmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AttachmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    taskId?: boolean
+    fileName?: boolean
+    fileUrl?: boolean
+    fileKey?: boolean
+    fileType?: boolean
+    fileSize?: boolean
+    uploadedAt?: boolean
+    task?: boolean | TaskDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["attachment"]>
+
+  export type AttachmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    taskId?: boolean
+    fileName?: boolean
+    fileUrl?: boolean
+    fileKey?: boolean
+    fileType?: boolean
+    fileSize?: boolean
+    uploadedAt?: boolean
+    task?: boolean | TaskDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["attachment"]>
+
+  export type AttachmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    taskId?: boolean
+    fileName?: boolean
+    fileUrl?: boolean
+    fileKey?: boolean
+    fileType?: boolean
+    fileSize?: boolean
+    uploadedAt?: boolean
+    task?: boolean | TaskDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["attachment"]>
+
+  export type AttachmentSelectScalar = {
+    id?: boolean
+    taskId?: boolean
+    fileName?: boolean
+    fileUrl?: boolean
+    fileKey?: boolean
+    fileType?: boolean
+    fileSize?: boolean
+    uploadedAt?: boolean
+  }
+
+  export type AttachmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "taskId" | "fileName" | "fileUrl" | "fileKey" | "fileType" | "fileSize" | "uploadedAt", ExtArgs["result"]["attachment"]>
+  export type AttachmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    task?: boolean | TaskDefaultArgs<ExtArgs>
+  }
+  export type AttachmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    task?: boolean | TaskDefaultArgs<ExtArgs>
+  }
+  export type AttachmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    task?: boolean | TaskDefaultArgs<ExtArgs>
+  }
+
+  export type $AttachmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Attachment"
+    objects: {
+      task: Prisma.$TaskPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      taskId: number
+      fileName: string
+      fileUrl: string
+      fileKey: string
+      fileType: string
+      fileSize: number
+      uploadedAt: Date
+    }, ExtArgs["result"]["attachment"]>
+    composites: {}
+  }
+
+  type AttachmentGetPayload<S extends boolean | null | undefined | AttachmentDefaultArgs> = $Result.GetResult<Prisma.$AttachmentPayload, S>
+
+  type AttachmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AttachmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AttachmentCountAggregateInputType | true
+    }
+
+  export interface AttachmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Attachment'], meta: { name: 'Attachment' } }
+    /**
+     * Find zero or one Attachment that matches the filter.
+     * @param {AttachmentFindUniqueArgs} args - Arguments to find a Attachment
+     * @example
+     * // Get one Attachment
+     * const attachment = await prisma.attachment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AttachmentFindUniqueArgs>(args: SelectSubset<T, AttachmentFindUniqueArgs<ExtArgs>>): Prisma__AttachmentClient<$Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Attachment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AttachmentFindUniqueOrThrowArgs} args - Arguments to find a Attachment
+     * @example
+     * // Get one Attachment
+     * const attachment = await prisma.attachment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AttachmentFindUniqueOrThrowArgs>(args: SelectSubset<T, AttachmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AttachmentClient<$Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Attachment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttachmentFindFirstArgs} args - Arguments to find a Attachment
+     * @example
+     * // Get one Attachment
+     * const attachment = await prisma.attachment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AttachmentFindFirstArgs>(args?: SelectSubset<T, AttachmentFindFirstArgs<ExtArgs>>): Prisma__AttachmentClient<$Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Attachment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttachmentFindFirstOrThrowArgs} args - Arguments to find a Attachment
+     * @example
+     * // Get one Attachment
+     * const attachment = await prisma.attachment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AttachmentFindFirstOrThrowArgs>(args?: SelectSubset<T, AttachmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__AttachmentClient<$Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Attachments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttachmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Attachments
+     * const attachments = await prisma.attachment.findMany()
+     * 
+     * // Get first 10 Attachments
+     * const attachments = await prisma.attachment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const attachmentWithIdOnly = await prisma.attachment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AttachmentFindManyArgs>(args?: SelectSubset<T, AttachmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Attachment.
+     * @param {AttachmentCreateArgs} args - Arguments to create a Attachment.
+     * @example
+     * // Create one Attachment
+     * const Attachment = await prisma.attachment.create({
+     *   data: {
+     *     // ... data to create a Attachment
+     *   }
+     * })
+     * 
+     */
+    create<T extends AttachmentCreateArgs>(args: SelectSubset<T, AttachmentCreateArgs<ExtArgs>>): Prisma__AttachmentClient<$Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Attachments.
+     * @param {AttachmentCreateManyArgs} args - Arguments to create many Attachments.
+     * @example
+     * // Create many Attachments
+     * const attachment = await prisma.attachment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AttachmentCreateManyArgs>(args?: SelectSubset<T, AttachmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Attachments and returns the data saved in the database.
+     * @param {AttachmentCreateManyAndReturnArgs} args - Arguments to create many Attachments.
+     * @example
+     * // Create many Attachments
+     * const attachment = await prisma.attachment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Attachments and only return the `id`
+     * const attachmentWithIdOnly = await prisma.attachment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AttachmentCreateManyAndReturnArgs>(args?: SelectSubset<T, AttachmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Attachment.
+     * @param {AttachmentDeleteArgs} args - Arguments to delete one Attachment.
+     * @example
+     * // Delete one Attachment
+     * const Attachment = await prisma.attachment.delete({
+     *   where: {
+     *     // ... filter to delete one Attachment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AttachmentDeleteArgs>(args: SelectSubset<T, AttachmentDeleteArgs<ExtArgs>>): Prisma__AttachmentClient<$Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Attachment.
+     * @param {AttachmentUpdateArgs} args - Arguments to update one Attachment.
+     * @example
+     * // Update one Attachment
+     * const attachment = await prisma.attachment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AttachmentUpdateArgs>(args: SelectSubset<T, AttachmentUpdateArgs<ExtArgs>>): Prisma__AttachmentClient<$Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Attachments.
+     * @param {AttachmentDeleteManyArgs} args - Arguments to filter Attachments to delete.
+     * @example
+     * // Delete a few Attachments
+     * const { count } = await prisma.attachment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AttachmentDeleteManyArgs>(args?: SelectSubset<T, AttachmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Attachments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttachmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Attachments
+     * const attachment = await prisma.attachment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AttachmentUpdateManyArgs>(args: SelectSubset<T, AttachmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Attachments and returns the data updated in the database.
+     * @param {AttachmentUpdateManyAndReturnArgs} args - Arguments to update many Attachments.
+     * @example
+     * // Update many Attachments
+     * const attachment = await prisma.attachment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Attachments and only return the `id`
+     * const attachmentWithIdOnly = await prisma.attachment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AttachmentUpdateManyAndReturnArgs>(args: SelectSubset<T, AttachmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Attachment.
+     * @param {AttachmentUpsertArgs} args - Arguments to update or create a Attachment.
+     * @example
+     * // Update or create a Attachment
+     * const attachment = await prisma.attachment.upsert({
+     *   create: {
+     *     // ... data to create a Attachment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Attachment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AttachmentUpsertArgs>(args: SelectSubset<T, AttachmentUpsertArgs<ExtArgs>>): Prisma__AttachmentClient<$Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Attachments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttachmentCountArgs} args - Arguments to filter Attachments to count.
+     * @example
+     * // Count the number of Attachments
+     * const count = await prisma.attachment.count({
+     *   where: {
+     *     // ... the filter for the Attachments we want to count
+     *   }
+     * })
+    **/
+    count<T extends AttachmentCountArgs>(
+      args?: Subset<T, AttachmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AttachmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Attachment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttachmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AttachmentAggregateArgs>(args: Subset<T, AttachmentAggregateArgs>): Prisma.PrismaPromise<GetAttachmentAggregateType<T>>
+
+    /**
+     * Group by Attachment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttachmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AttachmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AttachmentGroupByArgs['orderBy'] }
+        : { orderBy?: AttachmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AttachmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAttachmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Attachment model
+   */
+  readonly fields: AttachmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Attachment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AttachmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    task<T extends TaskDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TaskDefaultArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Attachment model
+   */
+  interface AttachmentFieldRefs {
+    readonly id: FieldRef<"Attachment", 'Int'>
+    readonly taskId: FieldRef<"Attachment", 'Int'>
+    readonly fileName: FieldRef<"Attachment", 'String'>
+    readonly fileUrl: FieldRef<"Attachment", 'String'>
+    readonly fileKey: FieldRef<"Attachment", 'String'>
+    readonly fileType: FieldRef<"Attachment", 'String'>
+    readonly fileSize: FieldRef<"Attachment", 'Int'>
+    readonly uploadedAt: FieldRef<"Attachment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Attachment findUnique
+   */
+  export type AttachmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachment
+     */
+    select?: AttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachment
+     */
+    omit?: AttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which Attachment to fetch.
+     */
+    where: AttachmentWhereUniqueInput
+  }
+
+  /**
+   * Attachment findUniqueOrThrow
+   */
+  export type AttachmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachment
+     */
+    select?: AttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachment
+     */
+    omit?: AttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which Attachment to fetch.
+     */
+    where: AttachmentWhereUniqueInput
+  }
+
+  /**
+   * Attachment findFirst
+   */
+  export type AttachmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachment
+     */
+    select?: AttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachment
+     */
+    omit?: AttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which Attachment to fetch.
+     */
+    where?: AttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Attachments to fetch.
+     */
+    orderBy?: AttachmentOrderByWithRelationInput | AttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Attachments.
+     */
+    cursor?: AttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Attachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Attachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Attachments.
+     */
+    distinct?: AttachmentScalarFieldEnum | AttachmentScalarFieldEnum[]
+  }
+
+  /**
+   * Attachment findFirstOrThrow
+   */
+  export type AttachmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachment
+     */
+    select?: AttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachment
+     */
+    omit?: AttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which Attachment to fetch.
+     */
+    where?: AttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Attachments to fetch.
+     */
+    orderBy?: AttachmentOrderByWithRelationInput | AttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Attachments.
+     */
+    cursor?: AttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Attachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Attachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Attachments.
+     */
+    distinct?: AttachmentScalarFieldEnum | AttachmentScalarFieldEnum[]
+  }
+
+  /**
+   * Attachment findMany
+   */
+  export type AttachmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachment
+     */
+    select?: AttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachment
+     */
+    omit?: AttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which Attachments to fetch.
+     */
+    where?: AttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Attachments to fetch.
+     */
+    orderBy?: AttachmentOrderByWithRelationInput | AttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Attachments.
+     */
+    cursor?: AttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Attachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Attachments.
+     */
+    skip?: number
+    distinct?: AttachmentScalarFieldEnum | AttachmentScalarFieldEnum[]
+  }
+
+  /**
+   * Attachment create
+   */
+  export type AttachmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachment
+     */
+    select?: AttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachment
+     */
+    omit?: AttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Attachment.
+     */
+    data: XOR<AttachmentCreateInput, AttachmentUncheckedCreateInput>
+  }
+
+  /**
+   * Attachment createMany
+   */
+  export type AttachmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Attachments.
+     */
+    data: AttachmentCreateManyInput | AttachmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Attachment createManyAndReturn
+   */
+  export type AttachmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachment
+     */
+    select?: AttachmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachment
+     */
+    omit?: AttachmentOmit<ExtArgs> | null
+    /**
+     * The data used to create many Attachments.
+     */
+    data: AttachmentCreateManyInput | AttachmentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Attachment update
+   */
+  export type AttachmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachment
+     */
+    select?: AttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachment
+     */
+    omit?: AttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Attachment.
+     */
+    data: XOR<AttachmentUpdateInput, AttachmentUncheckedUpdateInput>
+    /**
+     * Choose, which Attachment to update.
+     */
+    where: AttachmentWhereUniqueInput
+  }
+
+  /**
+   * Attachment updateMany
+   */
+  export type AttachmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Attachments.
+     */
+    data: XOR<AttachmentUpdateManyMutationInput, AttachmentUncheckedUpdateManyInput>
+    /**
+     * Filter which Attachments to update
+     */
+    where?: AttachmentWhereInput
+    /**
+     * Limit how many Attachments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Attachment updateManyAndReturn
+   */
+  export type AttachmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachment
+     */
+    select?: AttachmentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachment
+     */
+    omit?: AttachmentOmit<ExtArgs> | null
+    /**
+     * The data used to update Attachments.
+     */
+    data: XOR<AttachmentUpdateManyMutationInput, AttachmentUncheckedUpdateManyInput>
+    /**
+     * Filter which Attachments to update
+     */
+    where?: AttachmentWhereInput
+    /**
+     * Limit how many Attachments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Attachment upsert
+   */
+  export type AttachmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachment
+     */
+    select?: AttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachment
+     */
+    omit?: AttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Attachment to update in case it exists.
+     */
+    where: AttachmentWhereUniqueInput
+    /**
+     * In case the Attachment found by the `where` argument doesn't exist, create a new Attachment with this data.
+     */
+    create: XOR<AttachmentCreateInput, AttachmentUncheckedCreateInput>
+    /**
+     * In case the Attachment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AttachmentUpdateInput, AttachmentUncheckedUpdateInput>
+  }
+
+  /**
+   * Attachment delete
+   */
+  export type AttachmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachment
+     */
+    select?: AttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachment
+     */
+    omit?: AttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentInclude<ExtArgs> | null
+    /**
+     * Filter which Attachment to delete.
+     */
+    where: AttachmentWhereUniqueInput
+  }
+
+  /**
+   * Attachment deleteMany
+   */
+  export type AttachmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Attachments to delete
+     */
+    where?: AttachmentWhereInput
+    /**
+     * Limit how many Attachments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Attachment without action
+   */
+  export type AttachmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachment
+     */
+    select?: AttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachment
+     */
+    omit?: AttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentInclude<ExtArgs> | null
   }
 
 
@@ -4597,6 +5901,7 @@ export namespace Prisma {
   export const TaskScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    description: 'description',
     status: 'status',
     priority: 'priority',
     dueDate: 'dueDate',
@@ -4605,6 +5910,20 @@ export namespace Prisma {
   };
 
   export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
+
+
+  export const AttachmentScalarFieldEnum: {
+    id: 'id',
+    taskId: 'taskId',
+    fileName: 'fileName',
+    fileUrl: 'fileUrl',
+    fileKey: 'fileKey',
+    fileType: 'fileType',
+    fileSize: 'fileSize',
+    uploadedAt: 'uploadedAt'
+  };
+
+  export type AttachmentScalarFieldEnum = (typeof AttachmentScalarFieldEnum)[keyof typeof AttachmentScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -4853,6 +6172,7 @@ export namespace Prisma {
     NOT?: TaskWhereInput | TaskWhereInput[]
     id?: IntFilter<"Task"> | number
     name?: StringFilter<"Task"> | string
+    description?: StringNullableFilter<"Task"> | string | null
     status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
     priority?: EnumTaskPriorityFilter<"Task"> | $Enums.TaskPriority
     dueDate?: DateTimeNullableFilter<"Task"> | Date | string | null
@@ -4860,11 +6180,13 @@ export namespace Prisma {
     familyId?: IntFilter<"Task"> | number
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     family?: XOR<FamilyScalarRelationFilter, FamilyWhereInput>
+    attachments?: AttachmentListRelationFilter
   }
 
   export type TaskOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrderInput | SortOrder
     status?: SortOrder
     priority?: SortOrder
     dueDate?: SortOrderInput | SortOrder
@@ -4872,6 +6194,7 @@ export namespace Prisma {
     familyId?: SortOrder
     user?: UserOrderByWithRelationInput
     family?: FamilyOrderByWithRelationInput
+    attachments?: AttachmentOrderByRelationAggregateInput
   }
 
   export type TaskWhereUniqueInput = Prisma.AtLeast<{
@@ -4880,6 +6203,7 @@ export namespace Prisma {
     OR?: TaskWhereInput[]
     NOT?: TaskWhereInput | TaskWhereInput[]
     name?: StringFilter<"Task"> | string
+    description?: StringNullableFilter<"Task"> | string | null
     status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
     priority?: EnumTaskPriorityFilter<"Task"> | $Enums.TaskPriority
     dueDate?: DateTimeNullableFilter<"Task"> | Date | string | null
@@ -4887,11 +6211,13 @@ export namespace Prisma {
     familyId?: IntFilter<"Task"> | number
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     family?: XOR<FamilyScalarRelationFilter, FamilyWhereInput>
+    attachments?: AttachmentListRelationFilter
   }, "id">
 
   export type TaskOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrderInput | SortOrder
     status?: SortOrder
     priority?: SortOrder
     dueDate?: SortOrderInput | SortOrder
@@ -4910,11 +6236,84 @@ export namespace Prisma {
     NOT?: TaskScalarWhereWithAggregatesInput | TaskScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Task"> | number
     name?: StringWithAggregatesFilter<"Task"> | string
+    description?: StringNullableWithAggregatesFilter<"Task"> | string | null
     status?: EnumTaskStatusWithAggregatesFilter<"Task"> | $Enums.TaskStatus
     priority?: EnumTaskPriorityWithAggregatesFilter<"Task"> | $Enums.TaskPriority
     dueDate?: DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
     userId?: IntNullableWithAggregatesFilter<"Task"> | number | null
     familyId?: IntWithAggregatesFilter<"Task"> | number
+  }
+
+  export type AttachmentWhereInput = {
+    AND?: AttachmentWhereInput | AttachmentWhereInput[]
+    OR?: AttachmentWhereInput[]
+    NOT?: AttachmentWhereInput | AttachmentWhereInput[]
+    id?: IntFilter<"Attachment"> | number
+    taskId?: IntFilter<"Attachment"> | number
+    fileName?: StringFilter<"Attachment"> | string
+    fileUrl?: StringFilter<"Attachment"> | string
+    fileKey?: StringFilter<"Attachment"> | string
+    fileType?: StringFilter<"Attachment"> | string
+    fileSize?: IntFilter<"Attachment"> | number
+    uploadedAt?: DateTimeFilter<"Attachment"> | Date | string
+    task?: XOR<TaskScalarRelationFilter, TaskWhereInput>
+  }
+
+  export type AttachmentOrderByWithRelationInput = {
+    id?: SortOrder
+    taskId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileKey?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    uploadedAt?: SortOrder
+    task?: TaskOrderByWithRelationInput
+  }
+
+  export type AttachmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: AttachmentWhereInput | AttachmentWhereInput[]
+    OR?: AttachmentWhereInput[]
+    NOT?: AttachmentWhereInput | AttachmentWhereInput[]
+    taskId?: IntFilter<"Attachment"> | number
+    fileName?: StringFilter<"Attachment"> | string
+    fileUrl?: StringFilter<"Attachment"> | string
+    fileKey?: StringFilter<"Attachment"> | string
+    fileType?: StringFilter<"Attachment"> | string
+    fileSize?: IntFilter<"Attachment"> | number
+    uploadedAt?: DateTimeFilter<"Attachment"> | Date | string
+    task?: XOR<TaskScalarRelationFilter, TaskWhereInput>
+  }, "id">
+
+  export type AttachmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    taskId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileKey?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    uploadedAt?: SortOrder
+    _count?: AttachmentCountOrderByAggregateInput
+    _avg?: AttachmentAvgOrderByAggregateInput
+    _max?: AttachmentMaxOrderByAggregateInput
+    _min?: AttachmentMinOrderByAggregateInput
+    _sum?: AttachmentSumOrderByAggregateInput
+  }
+
+  export type AttachmentScalarWhereWithAggregatesInput = {
+    AND?: AttachmentScalarWhereWithAggregatesInput | AttachmentScalarWhereWithAggregatesInput[]
+    OR?: AttachmentScalarWhereWithAggregatesInput[]
+    NOT?: AttachmentScalarWhereWithAggregatesInput | AttachmentScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Attachment"> | number
+    taskId?: IntWithAggregatesFilter<"Attachment"> | number
+    fileName?: StringWithAggregatesFilter<"Attachment"> | string
+    fileUrl?: StringWithAggregatesFilter<"Attachment"> | string
+    fileKey?: StringWithAggregatesFilter<"Attachment"> | string
+    fileType?: StringWithAggregatesFilter<"Attachment"> | string
+    fileSize?: IntWithAggregatesFilter<"Attachment"> | number
+    uploadedAt?: DateTimeWithAggregatesFilter<"Attachment"> | Date | string
   }
 
   export type FamilyCreateInput = {
@@ -5022,45 +6421,54 @@ export namespace Prisma {
 
   export type TaskCreateInput = {
     name: string
+    description?: string | null
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
     dueDate?: Date | string | null
     user?: UserCreateNestedOneWithoutTasksInput
     family: FamilyCreateNestedOneWithoutTasksInput
+    attachments?: AttachmentCreateNestedManyWithoutTaskInput
   }
 
   export type TaskUncheckedCreateInput = {
     id?: number
     name: string
+    description?: string | null
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
     dueDate?: Date | string | null
     userId?: number | null
     familyId: number
+    attachments?: AttachmentUncheckedCreateNestedManyWithoutTaskInput
   }
 
   export type TaskUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneWithoutTasksNestedInput
     family?: FamilyUpdateOneRequiredWithoutTasksNestedInput
+    attachments?: AttachmentUpdateManyWithoutTaskNestedInput
   }
 
   export type TaskUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userId?: NullableIntFieldUpdateOperationsInput | number | null
     familyId?: IntFieldUpdateOperationsInput | number
+    attachments?: AttachmentUncheckedUpdateManyWithoutTaskNestedInput
   }
 
   export type TaskCreateManyInput = {
     id?: number
     name: string
+    description?: string | null
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
     dueDate?: Date | string | null
@@ -5070,6 +6478,7 @@ export namespace Prisma {
 
   export type TaskUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5078,11 +6487,85 @@ export namespace Prisma {
   export type TaskUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userId?: NullableIntFieldUpdateOperationsInput | number | null
     familyId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type AttachmentCreateInput = {
+    fileName: string
+    fileUrl: string
+    fileKey: string
+    fileType: string
+    fileSize: number
+    uploadedAt?: Date | string
+    task: TaskCreateNestedOneWithoutAttachmentsInput
+  }
+
+  export type AttachmentUncheckedCreateInput = {
+    id?: number
+    taskId: number
+    fileName: string
+    fileUrl: string
+    fileKey: string
+    fileType: string
+    fileSize: number
+    uploadedAt?: Date | string
+  }
+
+  export type AttachmentUpdateInput = {
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileKey?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    task?: TaskUpdateOneRequiredWithoutAttachmentsNestedInput
+  }
+
+  export type AttachmentUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    taskId?: IntFieldUpdateOperationsInput | number
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileKey?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AttachmentCreateManyInput = {
+    id?: number
+    taskId: number
+    fileName: string
+    fileUrl: string
+    fileKey: string
+    fileType: string
+    fileSize: number
+    uploadedAt?: Date | string
+  }
+
+  export type AttachmentUpdateManyMutationInput = {
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileKey?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AttachmentUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    taskId?: IntFieldUpdateOperationsInput | number
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileKey?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -5279,6 +6762,21 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type EnumTaskStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
     in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
@@ -5314,9 +6812,20 @@ export namespace Prisma {
     isNot?: FamilyWhereInput
   }
 
+  export type AttachmentListRelationFilter = {
+    every?: AttachmentWhereInput
+    some?: AttachmentWhereInput
+    none?: AttachmentWhereInput
+  }
+
+  export type AttachmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type TaskCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
     status?: SortOrder
     priority?: SortOrder
     dueDate?: SortOrder
@@ -5333,6 +6842,7 @@ export namespace Prisma {
   export type TaskMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
     status?: SortOrder
     priority?: SortOrder
     dueDate?: SortOrder
@@ -5343,6 +6853,7 @@ export namespace Prisma {
   export type TaskMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
     status?: SortOrder
     priority?: SortOrder
     dueDate?: SortOrder
@@ -5354,6 +6865,24 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     familyId?: SortOrder
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type EnumTaskStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -5388,6 +6917,81 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type TaskScalarRelationFilter = {
+    is?: TaskWhereInput
+    isNot?: TaskWhereInput
+  }
+
+  export type AttachmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    taskId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileKey?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    uploadedAt?: SortOrder
+  }
+
+  export type AttachmentAvgOrderByAggregateInput = {
+    id?: SortOrder
+    taskId?: SortOrder
+    fileSize?: SortOrder
+  }
+
+  export type AttachmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    taskId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileKey?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    uploadedAt?: SortOrder
+  }
+
+  export type AttachmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    taskId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileKey?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    uploadedAt?: SortOrder
+  }
+
+  export type AttachmentSumOrderByAggregateInput = {
+    id?: SortOrder
+    taskId?: SortOrder
+    fileSize?: SortOrder
+  }
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type UserCreateNestedManyWithoutFamilyInput = {
@@ -5568,6 +7172,24 @@ export namespace Prisma {
     connect?: FamilyWhereUniqueInput
   }
 
+  export type AttachmentCreateNestedManyWithoutTaskInput = {
+    create?: XOR<AttachmentCreateWithoutTaskInput, AttachmentUncheckedCreateWithoutTaskInput> | AttachmentCreateWithoutTaskInput[] | AttachmentUncheckedCreateWithoutTaskInput[]
+    connectOrCreate?: AttachmentCreateOrConnectWithoutTaskInput | AttachmentCreateOrConnectWithoutTaskInput[]
+    createMany?: AttachmentCreateManyTaskInputEnvelope
+    connect?: AttachmentWhereUniqueInput | AttachmentWhereUniqueInput[]
+  }
+
+  export type AttachmentUncheckedCreateNestedManyWithoutTaskInput = {
+    create?: XOR<AttachmentCreateWithoutTaskInput, AttachmentUncheckedCreateWithoutTaskInput> | AttachmentCreateWithoutTaskInput[] | AttachmentUncheckedCreateWithoutTaskInput[]
+    connectOrCreate?: AttachmentCreateOrConnectWithoutTaskInput | AttachmentCreateOrConnectWithoutTaskInput[]
+    createMany?: AttachmentCreateManyTaskInputEnvelope
+    connect?: AttachmentWhereUniqueInput | AttachmentWhereUniqueInput[]
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
   export type EnumTaskStatusFieldUpdateOperationsInput = {
     set?: $Enums.TaskStatus
   }
@@ -5596,6 +7218,52 @@ export namespace Prisma {
     upsert?: FamilyUpsertWithoutTasksInput
     connect?: FamilyWhereUniqueInput
     update?: XOR<XOR<FamilyUpdateToOneWithWhereWithoutTasksInput, FamilyUpdateWithoutTasksInput>, FamilyUncheckedUpdateWithoutTasksInput>
+  }
+
+  export type AttachmentUpdateManyWithoutTaskNestedInput = {
+    create?: XOR<AttachmentCreateWithoutTaskInput, AttachmentUncheckedCreateWithoutTaskInput> | AttachmentCreateWithoutTaskInput[] | AttachmentUncheckedCreateWithoutTaskInput[]
+    connectOrCreate?: AttachmentCreateOrConnectWithoutTaskInput | AttachmentCreateOrConnectWithoutTaskInput[]
+    upsert?: AttachmentUpsertWithWhereUniqueWithoutTaskInput | AttachmentUpsertWithWhereUniqueWithoutTaskInput[]
+    createMany?: AttachmentCreateManyTaskInputEnvelope
+    set?: AttachmentWhereUniqueInput | AttachmentWhereUniqueInput[]
+    disconnect?: AttachmentWhereUniqueInput | AttachmentWhereUniqueInput[]
+    delete?: AttachmentWhereUniqueInput | AttachmentWhereUniqueInput[]
+    connect?: AttachmentWhereUniqueInput | AttachmentWhereUniqueInput[]
+    update?: AttachmentUpdateWithWhereUniqueWithoutTaskInput | AttachmentUpdateWithWhereUniqueWithoutTaskInput[]
+    updateMany?: AttachmentUpdateManyWithWhereWithoutTaskInput | AttachmentUpdateManyWithWhereWithoutTaskInput[]
+    deleteMany?: AttachmentScalarWhereInput | AttachmentScalarWhereInput[]
+  }
+
+  export type AttachmentUncheckedUpdateManyWithoutTaskNestedInput = {
+    create?: XOR<AttachmentCreateWithoutTaskInput, AttachmentUncheckedCreateWithoutTaskInput> | AttachmentCreateWithoutTaskInput[] | AttachmentUncheckedCreateWithoutTaskInput[]
+    connectOrCreate?: AttachmentCreateOrConnectWithoutTaskInput | AttachmentCreateOrConnectWithoutTaskInput[]
+    upsert?: AttachmentUpsertWithWhereUniqueWithoutTaskInput | AttachmentUpsertWithWhereUniqueWithoutTaskInput[]
+    createMany?: AttachmentCreateManyTaskInputEnvelope
+    set?: AttachmentWhereUniqueInput | AttachmentWhereUniqueInput[]
+    disconnect?: AttachmentWhereUniqueInput | AttachmentWhereUniqueInput[]
+    delete?: AttachmentWhereUniqueInput | AttachmentWhereUniqueInput[]
+    connect?: AttachmentWhereUniqueInput | AttachmentWhereUniqueInput[]
+    update?: AttachmentUpdateWithWhereUniqueWithoutTaskInput | AttachmentUpdateWithWhereUniqueWithoutTaskInput[]
+    updateMany?: AttachmentUpdateManyWithWhereWithoutTaskInput | AttachmentUpdateManyWithWhereWithoutTaskInput[]
+    deleteMany?: AttachmentScalarWhereInput | AttachmentScalarWhereInput[]
+  }
+
+  export type TaskCreateNestedOneWithoutAttachmentsInput = {
+    create?: XOR<TaskCreateWithoutAttachmentsInput, TaskUncheckedCreateWithoutAttachmentsInput>
+    connectOrCreate?: TaskCreateOrConnectWithoutAttachmentsInput
+    connect?: TaskWhereUniqueInput
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
+  export type TaskUpdateOneRequiredWithoutAttachmentsNestedInput = {
+    create?: XOR<TaskCreateWithoutAttachmentsInput, TaskUncheckedCreateWithoutAttachmentsInput>
+    connectOrCreate?: TaskCreateOrConnectWithoutAttachmentsInput
+    upsert?: TaskUpsertWithoutAttachmentsInput
+    connect?: TaskWhereUniqueInput
+    update?: XOR<XOR<TaskUpdateToOneWithWhereWithoutAttachmentsInput, TaskUpdateWithoutAttachmentsInput>, TaskUncheckedUpdateWithoutAttachmentsInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -5722,6 +7390,20 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedEnumTaskStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
     in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
@@ -5745,6 +7427,23 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumTaskStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -5781,6 +7480,31 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutFamilyInput = {
     name: string
     clerkId: string
@@ -5808,19 +7532,23 @@ export namespace Prisma {
 
   export type TaskCreateWithoutFamilyInput = {
     name: string
+    description?: string | null
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
     dueDate?: Date | string | null
     user?: UserCreateNestedOneWithoutTasksInput
+    attachments?: AttachmentCreateNestedManyWithoutTaskInput
   }
 
   export type TaskUncheckedCreateWithoutFamilyInput = {
     id?: number
     name: string
+    description?: string | null
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
     dueDate?: Date | string | null
     userId?: number | null
+    attachments?: AttachmentUncheckedCreateNestedManyWithoutTaskInput
   }
 
   export type TaskCreateOrConnectWithoutFamilyInput = {
@@ -5882,6 +7610,7 @@ export namespace Prisma {
     NOT?: TaskScalarWhereInput | TaskScalarWhereInput[]
     id?: IntFilter<"Task"> | number
     name?: StringFilter<"Task"> | string
+    description?: StringNullableFilter<"Task"> | string | null
     status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
     priority?: EnumTaskPriorityFilter<"Task"> | $Enums.TaskPriority
     dueDate?: DateTimeNullableFilter<"Task"> | Date | string | null
@@ -5891,19 +7620,23 @@ export namespace Prisma {
 
   export type TaskCreateWithoutUserInput = {
     name: string
+    description?: string | null
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
     dueDate?: Date | string | null
     family: FamilyCreateNestedOneWithoutTasksInput
+    attachments?: AttachmentCreateNestedManyWithoutTaskInput
   }
 
   export type TaskUncheckedCreateWithoutUserInput = {
     id?: number
     name: string
+    description?: string | null
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
     dueDate?: Date | string | null
     familyId: number
+    attachments?: AttachmentUncheckedCreateNestedManyWithoutTaskInput
   }
 
   export type TaskCreateOrConnectWithoutUserInput = {
@@ -6012,6 +7745,35 @@ export namespace Prisma {
     create: XOR<FamilyCreateWithoutTasksInput, FamilyUncheckedCreateWithoutTasksInput>
   }
 
+  export type AttachmentCreateWithoutTaskInput = {
+    fileName: string
+    fileUrl: string
+    fileKey: string
+    fileType: string
+    fileSize: number
+    uploadedAt?: Date | string
+  }
+
+  export type AttachmentUncheckedCreateWithoutTaskInput = {
+    id?: number
+    fileName: string
+    fileUrl: string
+    fileKey: string
+    fileType: string
+    fileSize: number
+    uploadedAt?: Date | string
+  }
+
+  export type AttachmentCreateOrConnectWithoutTaskInput = {
+    where: AttachmentWhereUniqueInput
+    create: XOR<AttachmentCreateWithoutTaskInput, AttachmentUncheckedCreateWithoutTaskInput>
+  }
+
+  export type AttachmentCreateManyTaskInputEnvelope = {
+    data: AttachmentCreateManyTaskInput | AttachmentCreateManyTaskInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutTasksInput = {
     update: XOR<UserUpdateWithoutTasksInput, UserUncheckedUpdateWithoutTasksInput>
     create: XOR<UserCreateWithoutTasksInput, UserUncheckedCreateWithoutTasksInput>
@@ -6062,6 +7824,94 @@ export namespace Prisma {
     member?: UserUncheckedUpdateManyWithoutFamilyNestedInput
   }
 
+  export type AttachmentUpsertWithWhereUniqueWithoutTaskInput = {
+    where: AttachmentWhereUniqueInput
+    update: XOR<AttachmentUpdateWithoutTaskInput, AttachmentUncheckedUpdateWithoutTaskInput>
+    create: XOR<AttachmentCreateWithoutTaskInput, AttachmentUncheckedCreateWithoutTaskInput>
+  }
+
+  export type AttachmentUpdateWithWhereUniqueWithoutTaskInput = {
+    where: AttachmentWhereUniqueInput
+    data: XOR<AttachmentUpdateWithoutTaskInput, AttachmentUncheckedUpdateWithoutTaskInput>
+  }
+
+  export type AttachmentUpdateManyWithWhereWithoutTaskInput = {
+    where: AttachmentScalarWhereInput
+    data: XOR<AttachmentUpdateManyMutationInput, AttachmentUncheckedUpdateManyWithoutTaskInput>
+  }
+
+  export type AttachmentScalarWhereInput = {
+    AND?: AttachmentScalarWhereInput | AttachmentScalarWhereInput[]
+    OR?: AttachmentScalarWhereInput[]
+    NOT?: AttachmentScalarWhereInput | AttachmentScalarWhereInput[]
+    id?: IntFilter<"Attachment"> | number
+    taskId?: IntFilter<"Attachment"> | number
+    fileName?: StringFilter<"Attachment"> | string
+    fileUrl?: StringFilter<"Attachment"> | string
+    fileKey?: StringFilter<"Attachment"> | string
+    fileType?: StringFilter<"Attachment"> | string
+    fileSize?: IntFilter<"Attachment"> | number
+    uploadedAt?: DateTimeFilter<"Attachment"> | Date | string
+  }
+
+  export type TaskCreateWithoutAttachmentsInput = {
+    name: string
+    description?: string | null
+    status?: $Enums.TaskStatus
+    priority?: $Enums.TaskPriority
+    dueDate?: Date | string | null
+    user?: UserCreateNestedOneWithoutTasksInput
+    family: FamilyCreateNestedOneWithoutTasksInput
+  }
+
+  export type TaskUncheckedCreateWithoutAttachmentsInput = {
+    id?: number
+    name: string
+    description?: string | null
+    status?: $Enums.TaskStatus
+    priority?: $Enums.TaskPriority
+    dueDate?: Date | string | null
+    userId?: number | null
+    familyId: number
+  }
+
+  export type TaskCreateOrConnectWithoutAttachmentsInput = {
+    where: TaskWhereUniqueInput
+    create: XOR<TaskCreateWithoutAttachmentsInput, TaskUncheckedCreateWithoutAttachmentsInput>
+  }
+
+  export type TaskUpsertWithoutAttachmentsInput = {
+    update: XOR<TaskUpdateWithoutAttachmentsInput, TaskUncheckedUpdateWithoutAttachmentsInput>
+    create: XOR<TaskCreateWithoutAttachmentsInput, TaskUncheckedCreateWithoutAttachmentsInput>
+    where?: TaskWhereInput
+  }
+
+  export type TaskUpdateToOneWithWhereWithoutAttachmentsInput = {
+    where?: TaskWhereInput
+    data: XOR<TaskUpdateWithoutAttachmentsInput, TaskUncheckedUpdateWithoutAttachmentsInput>
+  }
+
+  export type TaskUpdateWithoutAttachmentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneWithoutTasksNestedInput
+    family?: FamilyUpdateOneRequiredWithoutTasksNestedInput
+  }
+
+  export type TaskUncheckedUpdateWithoutAttachmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userId?: NullableIntFieldUpdateOperationsInput | number | null
+    familyId?: IntFieldUpdateOperationsInput | number
+  }
+
   export type UserCreateManyFamilyInput = {
     id?: number
     name: string
@@ -6072,6 +7922,7 @@ export namespace Prisma {
   export type TaskCreateManyFamilyInput = {
     id?: number
     name: string
+    description?: string | null
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
     dueDate?: Date | string | null
@@ -6102,24 +7953,29 @@ export namespace Prisma {
 
   export type TaskUpdateWithoutFamilyInput = {
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneWithoutTasksNestedInput
+    attachments?: AttachmentUpdateManyWithoutTaskNestedInput
   }
 
   export type TaskUncheckedUpdateWithoutFamilyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userId?: NullableIntFieldUpdateOperationsInput | number | null
+    attachments?: AttachmentUncheckedUpdateManyWithoutTaskNestedInput
   }
 
   export type TaskUncheckedUpdateManyWithoutFamilyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6129,6 +7985,7 @@ export namespace Prisma {
   export type TaskCreateManyUserInput = {
     id?: number
     name: string
+    description?: string | null
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
     dueDate?: Date | string | null
@@ -6137,28 +7994,72 @@ export namespace Prisma {
 
   export type TaskUpdateWithoutUserInput = {
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     family?: FamilyUpdateOneRequiredWithoutTasksNestedInput
+    attachments?: AttachmentUpdateManyWithoutTaskNestedInput
   }
 
   export type TaskUncheckedUpdateWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    familyId?: IntFieldUpdateOperationsInput | number
+    attachments?: AttachmentUncheckedUpdateManyWithoutTaskNestedInput
+  }
+
+  export type TaskUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     familyId?: IntFieldUpdateOperationsInput | number
   }
 
-  export type TaskUncheckedUpdateManyWithoutUserInput = {
+  export type AttachmentCreateManyTaskInput = {
+    id?: number
+    fileName: string
+    fileUrl: string
+    fileKey: string
+    fileType: string
+    fileSize: number
+    uploadedAt?: Date | string
+  }
+
+  export type AttachmentUpdateWithoutTaskInput = {
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileKey?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AttachmentUncheckedUpdateWithoutTaskInput = {
     id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
-    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    familyId?: IntFieldUpdateOperationsInput | number
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileKey?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AttachmentUncheckedUpdateManyWithoutTaskInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileKey?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

@@ -1,17 +1,14 @@
 import { familyRouter } from "~/server/api/routers/family";
 import { userRouter } from "~/server/api/routers/user";
 import { taskRouter } from "~/server/api/routers/task";
+import { attachmentRouter } from "~/server/api/routers/attachment";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
-/**
- * This is the primary router for your server.
- *
- * All routers added in /api/routers should be manually added here.
- */
 export const appRouter = createTRPCRouter({
   family: familyRouter,
   user: userRouter,
   task: taskRouter,
+  attachment: attachmentRouter,
 });
 
 // export type definition of API

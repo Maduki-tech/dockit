@@ -138,11 +138,23 @@ exports.Prisma.UserScalarFieldEnum = {
 exports.Prisma.TaskScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  description: 'description',
   status: 'status',
   priority: 'priority',
   dueDate: 'dueDate',
   userId: 'userId',
   familyId: 'familyId'
+};
+
+exports.Prisma.AttachmentScalarFieldEnum = {
+  id: 'id',
+  taskId: 'taskId',
+  fileName: 'fileName',
+  fileUrl: 'fileUrl',
+  fileKey: 'fileKey',
+  fileType: 'fileType',
+  fileSize: 'fileSize',
+  uploadedAt: 'uploadedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -179,7 +191,8 @@ exports.TaskPriority = exports.$Enums.TaskPriority = {
 exports.Prisma.ModelName = {
   Family: 'Family',
   User: 'User',
-  Task: 'Task'
+  Task: 'Task',
+  Attachment: 'Attachment'
 };
 
 /**

@@ -9,7 +9,6 @@ import {
     DialogTrigger,
 } from '~/components/ui/dialog';
 import { Button } from '~/components/ui/button';
-import { Input } from '~/components/ui/input';
 import { Plus, CalendarDays, ArrowUp, Minus, ArrowDown, X } from 'lucide-react';
 import { Calendar } from '~/components/ui/calendar';
 import {
@@ -68,6 +67,7 @@ const AVATAR_COLORS = [
 export function CreateTaskDialog() {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
     const [assigneeId, setAssigneeId] = useState<string>('');
     const [priority, setPriority] = useState<TaskPriority>(TaskPriority.MEDIUM);
     const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
@@ -96,6 +96,7 @@ export function CreateTaskDialog() {
         if (!name.trim()) return;
         createTask.mutate({
             name: name.trim(),
+            description: description.trim() || undefined,
             userId: assigneeId ? Number(assigneeId) : undefined,
             priority,
             dueDate: dueDate ? dueDate.toISOString() : undefined,
@@ -105,6 +106,7 @@ export function CreateTaskDialog() {
     function handleOpenChange(next: boolean) {
         if (!next) {
             setName('');
+            setDescription('');
             setAssigneeId('');
             setPriority(TaskPriority.MEDIUM);
             setDueDate(undefined);
@@ -134,6 +136,17 @@ export function CreateTaskDialog() {
                             onChange={(e) => setName(e.target.value)}
                             autoFocus
                             className="placeholder:text-muted-foreground/40 text-foreground w-full resize-none bg-transparent text-base leading-snug font-medium outline-none"
+                        />
+                    </div>
+
+                    {/* Description */}
+                    <div className="px-6 pb-4">
+                        <textarea
+                            rows={2}
+                            placeholder="Add a description… (optional)"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            className="placeholder:text-muted-foreground/30 text-foreground w-full resize-none bg-transparent text-sm leading-relaxed outline-none"
                         />
                     </div>
 

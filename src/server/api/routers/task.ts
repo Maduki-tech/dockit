@@ -1,24 +1,7 @@
 import { z } from 'zod';
-import { TRPCError } from '@trpc/server';
 import { TaskStatus, TaskPriority } from '../../../../generated/prisma';
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc';
-
-async function getCallerFamilyId(
-    db: { user: { findUnique: Function } },
-    clerkId: string
-) {
-    const user = await db.user.findUnique({
-        where: { clerkId },
-        select: { familyId: true },
-    });
-    if (!user?.familyId) {
-        throw new TRPCError({
-            code: 'FORBIDDEN',
-            message: 'You are not part of a family.',
-        });
-    }
-    return user.familyId;
-}
+import { getCallerFamilyId } from '~/server/api/utils';
 
 export const taskRouter = createTRPCRouter({
     list: protectedProcedure
@@ -44,7 +27,7 @@ export const taskRouter = createTRPCRouter({
                     }),
                 },
                 orderBy: { status: 'asc' },
-                include: { user: true },
+                include: { user: true, _count: { select: { attachments: true } } },
             });
         }),
 
@@ -53,7 +36,7 @@ export const taskRouter = createTRPCRouter({
         .query(({ ctx, input }) => {
             return ctx.db.task.findUnique({
                 where: { id: input.id },
-                include: { user: true },
+                include: { user: true, attachments: { orderBy: { uploadedAt: 'asc' } } },
             });
         }),
 
@@ -61,6 +44,7 @@ export const taskRouter = createTRPCRouter({
         .input(
             z.object({
                 name: z.string().min(1),
+                description: z.string().optional(),
                 userId: z.number().optional(),
                 status: z.nativeEnum(TaskStatus).optional(),
                 priority: z.nativeEnum(TaskPriority).optional(),
@@ -84,6 +68,7 @@ export const taskRouter = createTRPCRouter({
             z.object({
                 id: z.number(),
                 name: z.string().min(1).optional(),
+                description: z.string().nullable().optional(),
                 status: z.nativeEnum(TaskStatus).optional(),
                 priority: z.nativeEnum(TaskPriority).optional(),
                 dueDate: z.string().datetime().nullable().optional(),

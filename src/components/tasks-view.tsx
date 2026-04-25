@@ -18,6 +18,7 @@ import {
     Flag,
     MoreVertical,
     CalendarDays,
+    Paperclip,
 } from 'lucide-react';
 import { Badge } from '~/components/ui/badge';
 import { Input } from '~/components/ui/input';
@@ -59,10 +60,12 @@ import {
 type Task = {
     id: number;
     name: string;
+    description: string | null;
     status: TaskStatus;
     priority: TaskPriority;
     dueDate: Date | null;
     user: { id: number; name: string } | null;
+    _count: { attachments: number };
 };
 
 type SortKey = 'default' | 'name' | 'dueDate' | 'priority' | 'assignee';
@@ -171,7 +174,12 @@ function StatusIcon({ status }: { status: TaskStatus }) {
 
 // ─── Main component ──────────────────────────────────────────────────────────
 
-export function TasksView() {
+type TasksViewProps = {
+    selectedTaskId: number | null;
+    onSelectTask: (id: number | null) => void;
+};
+
+export function TasksView({ selectedTaskId, onSelectTask }: TasksViewProps) {
     const { data: tasks = [], isLoading } = api.task.list.useQuery();
     const { data: me } = api.user.me.useQuery();
     const { data: members = [] } = api.family.getMembersOfFamily.useQuery(
@@ -286,7 +294,7 @@ export function TasksView() {
     function toggleStatus(s: TaskStatus) {
         setStatusFilter((prev) => {
             const next = new Set(prev);
-            next.has(s) ? next.delete(s) : next.add(s);
+            if (next.has(s)) { next.delete(s); } else { next.add(s); }
             return next;
         });
     }
@@ -294,7 +302,7 @@ export function TasksView() {
     function togglePriority(p: TaskPriority) {
         setPriorityFilter((prev) => {
             const next = new Set(prev);
-            next.has(p) ? next.delete(p) : next.add(p);
+            if (next.has(p)) { next.delete(p); } else { next.add(p); }
             return next;
         });
     }
@@ -302,13 +310,14 @@ export function TasksView() {
     function toggleAssignee(id: number | null) {
         setAssigneeFilter((prev) => {
             const next = new Set(prev);
-            next.has(id) ? next.delete(id) : next.add(id);
+            if (next.has(id)) { next.delete(id); } else { next.add(id); }
             return next;
         });
     }
 
     // ── Row ───────────────────────────────────────────────────────────────
     function TaskRow({ task }: { task: Task }) {
+        const isSelected = task.id === selectedTaskId;
         const [datePickerOpen, setDatePickerOpen] = useState(false);
         const selectedDate = task.dueDate ? new Date(task.dueDate) : undefined;
         const isOverdue =
@@ -320,17 +329,23 @@ export function TasksView() {
             <>
             <ContextMenu>
                 <ContextMenuTrigger asChild>
-                    <div className="group border-border/50 hover:bg-muted/30 flex cursor-default items-center gap-3 border-b px-2 py-3 last:border-0 transition-colors">
+                    <div
+                        className={cn(
+                            'group border-border/50 flex cursor-pointer items-center gap-3 border-b px-2 py-3 last:border-0 transition-colors',
+                            isSelected ? 'bg-muted/60' : 'hover:bg-muted/30'
+                        )}
+                        onClick={() => onSelectTask(isSelected ? null : task.id)}
+                    >
                         {/* Status toggle */}
                         <button
                             className="flex-shrink-0 transition-transform hover:scale-110"
-                            onClick={() =>
+                            onClick={(e) => {
+                                e.stopPropagation();
                                 updateTask.mutate({
                                     id: task.id,
-                                    status: STATUS_CONFIG[task.status]
-                                        .nextStatus,
-                                })
-                            }
+                                    status: STATUS_CONFIG[task.status].nextStatus,
+                                });
+                            }}
                             disabled={updateTask.isPending}
                             title={`Mark as ${STATUS_CONFIG[STATUS_CONFIG[task.status].nextStatus].label}`}
                         >
@@ -378,6 +393,13 @@ export function TasksView() {
                             >
                                 {PRIORITY_CONFIG[task.priority].label}
                             </Badge>
+
+                            {task._count.attachments > 0 && (
+                                <span className="text-muted-foreground flex items-center gap-0.5 text-xs">
+                                    <Paperclip className="h-3 w-3" />
+                                    {task._count.attachments}
+                                </span>
+                            )}
 
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
