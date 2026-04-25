@@ -70,13 +70,28 @@ function formatFileSize(bytes: number) {
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-const STATUS_CONFIG: Record<TaskStatus, { label: string; icon: React.ReactNode }> = {
-    TODO: { label: 'Todo', icon: <Circle className="h-4 w-4 text-muted-foreground/60" /> },
-    IN_PROGRESS: { label: 'In Progress', icon: <CircleDot className="h-4 w-4 text-yellow-500" /> },
-    DONE: { label: 'Done', icon: <CircleCheck className="h-4 w-4 text-green-500" /> },
+const STATUS_CONFIG: Record<
+    TaskStatus,
+    { label: string; icon: React.ReactNode }
+> = {
+    TODO: {
+        label: 'Todo',
+        icon: <Circle className="text-muted-foreground/60 h-4 w-4" />,
+    },
+    IN_PROGRESS: {
+        label: 'In Progress',
+        icon: <CircleDot className="h-4 w-4 text-yellow-500" />,
+    },
+    DONE: {
+        label: 'Done',
+        icon: <CircleCheck className="h-4 w-4 text-green-500" />,
+    },
 };
 
-const PRIORITY_CONFIG: Record<TaskPriority, { label: string; icon: React.ReactNode; className: string }> = {
+const PRIORITY_CONFIG: Record<
+    TaskPriority,
+    { label: string; icon: React.ReactNode; className: string }
+> = {
     HIGH: {
         label: 'High',
         icon: <ArrowUp className="h-3.5 w-3.5" />,
@@ -95,11 +110,13 @@ const PRIORITY_CONFIG: Record<TaskPriority, { label: string; icon: React.ReactNo
 };
 
 function AttachmentIcon({ fileType }: { fileType: string }) {
-    if (fileType.startsWith('image/')) return <ImageIcon className="h-4 w-4 text-blue-500" />;
-    if (fileType === 'application/pdf') return <FileText className="h-4 w-4 text-red-500" />;
+    if (fileType.startsWith('image/'))
+        return <ImageIcon className="h-4 w-4 text-blue-500" />;
+    if (fileType === 'application/pdf')
+        return <FileText className="h-4 w-4 text-red-500" />;
     if (fileType.includes('mail') || fileType.includes('rfc822'))
         return <Mail className="h-4 w-4 text-purple-500" />;
-    return <Paperclip className="h-4 w-4 text-muted-foreground" />;
+    return <Paperclip className="text-muted-foreground h-4 w-4" />;
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
@@ -128,7 +145,8 @@ export function TaskDetailPanel({ taskId, onClose, members }: Props) {
             void utils.task.get.invalidate({ id: taskId });
             void utils.task.list.invalidate();
         },
-        onError: (err) => toast.error('Failed to save attachment: ' + err.message),
+        onError: (err) =>
+            toast.error('Failed to save attachment: ' + err.message),
     });
 
     const deleteAttachment = api.attachment.delete.useMutation({
@@ -153,7 +171,9 @@ export function TaskDetailPanel({ taskId, onClose, members }: Props) {
                 });
             });
         },
-        onUploadError: (err) => { toast.error('Upload failed: ' + err.message); },
+        onUploadError: (err) => {
+            toast.error('Upload failed: ' + err.message);
+        },
     });
 
     // ── Inline editing state ──────────────────────────────────────────────
@@ -226,7 +246,9 @@ export function TaskDetailPanel({ taskId, onClose, members }: Props) {
 
     if (!task) return null;
 
-    const attachments = (task as typeof task & { attachments?: Attachment[] }).attachments ?? [];
+    const attachments =
+        (task as typeof task & { attachments?: Attachment[] }).attachments ??
+        [];
 
     return (
         <div
@@ -268,11 +290,11 @@ export function TaskDetailPanel({ taskId, onClose, members }: Props) {
                                     setEditingTitle(false);
                                 }
                             }}
-                            className="text-foreground w-full resize-none bg-transparent text-base font-semibold leading-snug outline-none"
+                            className="text-foreground w-full resize-none bg-transparent text-base leading-snug font-semibold outline-none"
                         />
                     ) : (
                         <h2
-                            className="text-foreground cursor-text text-base font-semibold leading-snug hover:opacity-70"
+                            className="text-foreground cursor-text text-base leading-snug font-semibold hover:opacity-70"
                             onClick={() => setEditingTitle(true)}
                         >
                             {task.name}
@@ -291,12 +313,17 @@ export function TaskDetailPanel({ taskId, onClose, members }: Props) {
                             {Object.values(TaskStatus).map((s) => (
                                 <button
                                     key={s}
-                                    onClick={() => updateTask.mutate({ id: task.id, status: s })}
+                                    onClick={() =>
+                                        updateTask.mutate({
+                                            id: task.id,
+                                            status: s,
+                                        })
+                                    }
                                     className={cn(
                                         'flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium transition-colors',
                                         task.status === s
                                             ? 'border-foreground/20 bg-foreground/5'
-                                            : 'border-transparent text-muted-foreground hover:border-border hover:text-foreground'
+                                            : 'text-muted-foreground hover:border-border hover:text-foreground border-transparent'
                                     )}
                                 >
                                     {STATUS_CONFIG[s].icon}
@@ -315,12 +342,17 @@ export function TaskDetailPanel({ taskId, onClose, members }: Props) {
                             {Object.values(TaskPriority).map((p) => (
                                 <button
                                     key={p}
-                                    onClick={() => updateTask.mutate({ id: task.id, priority: p })}
+                                    onClick={() =>
+                                        updateTask.mutate({
+                                            id: task.id,
+                                            priority: p,
+                                        })
+                                    }
                                     className={cn(
                                         'flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium transition-colors',
                                         task.priority === p
                                             ? PRIORITY_CONFIG[p].className
-                                            : 'border-transparent text-muted-foreground hover:border-border hover:text-foreground'
+                                            : 'text-muted-foreground hover:border-border hover:text-foreground border-transparent'
                                     )}
                                 >
                                     {PRIORITY_CONFIG[p].icon}
@@ -337,19 +369,25 @@ export function TaskDetailPanel({ taskId, onClose, members }: Props) {
                         </span>
                         <div className="flex flex-wrap gap-1.5">
                             <button
-                                onClick={() => updateTask.mutate({ id: task.id, userId: null })}
+                                onClick={() =>
+                                    updateTask.mutate({
+                                        id: task.id,
+                                        userId: null,
+                                    })
+                                }
                                 className={cn(
                                     'flex items-center gap-1.5 rounded-full border px-2 py-1 text-xs transition-colors',
                                     !task.user
                                         ? 'border-foreground/20 bg-foreground/5 font-medium'
-                                        : 'border-transparent text-muted-foreground hover:border-border'
+                                        : 'text-muted-foreground hover:border-border border-transparent'
                                 )}
                             >
                                 <div className="border-muted-foreground/30 h-4 w-4 rounded-full border border-dashed" />
                                 None
                             </button>
                             {members.map((member, i) => {
-                                const colorClass = AVATAR_COLORS[i % AVATAR_COLORS.length]!;
+                                const colorClass =
+                                    AVATAR_COLORS[i % AVATAR_COLORS.length]!;
                                 const isActive = task.user?.id === member.id;
                                 return (
                                     <button
@@ -357,14 +395,16 @@ export function TaskDetailPanel({ taskId, onClose, members }: Props) {
                                         onClick={() =>
                                             updateTask.mutate({
                                                 id: task.id,
-                                                userId: isActive ? null : member.id,
+                                                userId: isActive
+                                                    ? null
+                                                    : member.id,
                                             })
                                         }
                                         className={cn(
                                             'flex items-center gap-1.5 rounded-full border px-2 py-1 text-xs transition-colors',
                                             isActive
                                                 ? 'border-foreground/20 bg-foreground/5 font-medium'
-                                                : 'border-transparent text-muted-foreground hover:border-border hover:text-foreground'
+                                                : 'text-muted-foreground hover:border-border hover:text-foreground border-transparent'
                                         )}
                                     >
                                         <div
@@ -390,10 +430,12 @@ export function TaskDetailPanel({ taskId, onClose, members }: Props) {
                         <div className="flex items-center gap-1.5">
                             <Popover>
                                 <PopoverTrigger asChild>
-                                    <button className="border-border/60 text-foreground flex h-7 items-center gap-1.5 rounded-md border px-2.5 text-xs transition-colors hover:bg-muted/40">
+                                    <button className="border-border/60 text-foreground hover:bg-muted/40 flex h-7 items-center gap-1.5 rounded-md border px-2.5 text-xs transition-colors">
                                         <CalendarDays className="h-3.5 w-3.5" />
                                         {task.dueDate
-                                            ? new Date(task.dueDate).toLocaleDateString('en-US', {
+                                            ? new Date(
+                                                  task.dueDate
+                                              ).toLocaleDateString('en-US', {
                                                   month: 'short',
                                                   day: 'numeric',
                                                   year: 'numeric',
@@ -401,15 +443,25 @@ export function TaskDetailPanel({ taskId, onClose, members }: Props) {
                                             : 'Set date'}
                                     </button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0" align="start">
+                                <PopoverContent
+                                    className="w-auto p-0"
+                                    align="start"
+                                >
                                     <Calendar
                                         mode="single"
-                                        selected={task.dueDate ? new Date(task.dueDate) : undefined}
+                                        selected={
+                                            task.dueDate
+                                                ? new Date(task.dueDate)
+                                                : undefined
+                                        }
                                         onSelect={(date) => {
-                                            if (date) date.setHours(23, 59, 59, 0);
+                                            if (date)
+                                                date.setHours(23, 59, 59, 0);
                                             updateTask.mutate({
                                                 id: task.id,
-                                                dueDate: date ? date.toISOString() : null,
+                                                dueDate: date
+                                                    ? date.toISOString()
+                                                    : null,
                                             });
                                         }}
                                         initialFocus
@@ -419,7 +471,10 @@ export function TaskDetailPanel({ taskId, onClose, members }: Props) {
                             {task.dueDate && (
                                 <button
                                     onClick={() =>
-                                        updateTask.mutate({ id: task.id, dueDate: null })
+                                        updateTask.mutate({
+                                            id: task.id,
+                                            dueDate: null,
+                                        })
                                     }
                                     className="text-muted-foreground hover:text-foreground transition-colors"
                                     title="Clear date"
@@ -435,7 +490,7 @@ export function TaskDetailPanel({ taskId, onClose, members }: Props) {
 
                 {/* ── Description ── */}
                 <div className="px-4 py-3">
-                    <p className="text-muted-foreground mb-1.5 text-xs font-medium uppercase tracking-wide">
+                    <p className="text-muted-foreground mb-1.5 text-xs font-medium tracking-wide uppercase">
                         Description
                     </p>
                     {editingDesc ? (
@@ -473,7 +528,7 @@ export function TaskDetailPanel({ taskId, onClose, members }: Props) {
 
                 {/* ── Attachments ── */}
                 <div className="px-4 py-3">
-                    <p className="text-muted-foreground mb-2 text-xs font-medium uppercase tracking-wide">
+                    <p className="text-muted-foreground mb-2 text-xs font-medium tracking-wide uppercase">
                         Attachments
                     </p>
 
@@ -569,7 +624,9 @@ export function TaskDetailPanel({ taskId, onClose, members }: Props) {
 
                                     <button
                                         onClick={() =>
-                                            deleteAttachment.mutate({ id: att.id })
+                                            deleteAttachment.mutate({
+                                                id: att.id,
+                                            })
                                         }
                                         disabled={deleteAttachment.isPending}
                                         className="text-muted-foreground/40 hover:text-destructive flex-shrink-0 transition-colors"

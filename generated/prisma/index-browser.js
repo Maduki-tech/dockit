@@ -157,6 +157,12 @@ exports.Prisma.AttachmentScalarFieldEnum = {
   uploadedAt: 'uploadedAt'
 };
 
+exports.Prisma.NewsletterSubscriberScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  subscribedAt: 'subscribedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -192,7 +198,8 @@ exports.Prisma.ModelName = {
   Family: 'Family',
   User: 'User',
   Task: 'Task',
-  Attachment: 'Attachment'
+  Attachment: 'Attachment',
+  NewsletterSubscriber: 'NewsletterSubscriber'
 };
 
 /**
